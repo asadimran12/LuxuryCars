@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 const User = require("../model/auth_model");
 const OTP_model = require("../model/OTP_model");
+const Driverbook_model = require("../model/Driver_booking_model");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 
@@ -167,7 +168,6 @@ const Deletespecificuser = async (req, res) => {
   }
 };
 
-
 /* ======================
    PASSWORD RESET FLOW
 ====================== */
@@ -262,9 +262,71 @@ const ResetPassword = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+const Bookdriver = async (req, res) => {
+  try {
+    const driver = req.params.id;
 
+    const {
+      passengerName,
+      passengerPhone,
+      pickupLocation,
+      dropoffLocation,
+      distance,
+      duration,
+      fare,
+      bookingDate,
+    } = req.body;
 
+    if (
+      !passengerName ||
+      !passengerPhone ||
+      !pickupLocation ||
+      !dropoffLocation ||
+      !distance ||
+      !duration ||
+      !fare
+    ) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
 
+    // Optional: check for duplicate booking
+    const existingBooking = await Driverbook_model.findOne({
+      passengerPhone,
+      pickupLocation,
+      dropoffLocation,
+      bookingDate,
+    });
+
+    if (existingBooking) {
+      return res
+        .status(409)
+        .json({ message: "You already have a booking at this time." });
+    }
+
+    // Create new booking with default status and paymentStatus
+    const newBooking = new Driverbook_model({
+      driver,
+      passengerName,
+      passengerPhone,
+      pickupLocation,
+      dropoffLocation,
+      distance,
+      duration,
+      fare,
+      status: "pending", // default
+      paymentStatus: "pending", // default
+      bookingDate: bookingDate || Date.now(),
+    });
+
+    await newBooking.save();
+
+    return res
+      .status(201)
+      .json({ message: "Booking created successfully", newBooking });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
   Login,
@@ -274,6 +336,6 @@ module.exports = {
   Deletespecificuser,
   SendOTP,
   VerifyOTP,
-  ResetPassword
-
+  ResetPassword,
+  Bookdriver,
 };

@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../components/Context/Authcontent";
 import { useNavigate, useParams } from "react-router-dom";
-import { Calendar, User, Mail, Car, DollarSign, Tag, CheckCircle } from "lucide-react";
+import {
+  Calendar,
+  User,
+  Mail,
+  Car,
+  DollarSign,
+  Tag,
+  CheckCircle,
+} from "lucide-react";
 
 const Booking = () => {
   const { token } = useAuth();
@@ -11,7 +19,7 @@ const Booking = () => {
   const [bookingDetail, setBookingDetail] = useState(null);
   const [user, setUser] = useState(null);
   const [price, setPrice] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(""); 
+  const [successMessage, setSuccessMessage] = useState("");
   const [dates, setDates] = useState({
     startDate: "",
     endDate: "",
@@ -91,10 +99,8 @@ const Booking = () => {
       const data = await response.json();
       setBookingDetail(data);
 
-      // ✅ Show success message instead of immediate navigation
       setSuccessMessage("🎉 Booking confirmed successfully!");
 
-      // ✅ Navigate after short delay
       setTimeout(() => {
         navigate("/");
       }, 2000);
@@ -104,20 +110,9 @@ const Booking = () => {
   };
 
   return (
-    <div
-      className="min-h-screen flex justify-center items-center p-6 relative"
-      style={{
-        backgroundImage:
-          "url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2940&auto=format&fit=crop')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/60"></div>
-
+    <div className="min-h-screen flex justify-center items-center p-6 bg-white">
       {/* Booking Card */}
-      <div className="relative bg-white/90 backdrop-blur-md p-10 rounded-3xl shadow-2xl w-full max-w-2xl border border-white/30">
+      <div className="relative bg-white p-10 rounded-3xl shadow-lg w-full max-w-2xl border border-gray-200">
         <h2 className="text-3xl font-extrabold mb-8 text-center text-gray-900">
           🚗 Booking Details
         </h2>
@@ -133,16 +128,16 @@ const Booking = () => {
         {bookingDetail && (
           <div className="mb-6 space-y-3 text-gray-800">
             <div className="flex items-center gap-3">
-              <Car className="text-indigo-600" />
+              <Car className="text-[#D08700]" />
               <p>
                 <strong>Car:</strong> {bookingDetail.name}
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <Tag className="text-green-600" />
+              <Tag className="text-[#D08700]" />
               <p>
                 <strong>Price/Day:</strong>{" "}
-                <span className="text-green-600 font-semibold">
+                <span className="text-[#D08700] font-semibold">
                   ${bookingDetail.pricePerDay}
                 </span>
               </p>
@@ -153,13 +148,13 @@ const Booking = () => {
         {user && (
           <div className="mb-6 space-y-3 text-gray-800">
             <div className="flex items-center gap-3">
-              <User className="text-blue-600" />
+              <User className="text-[#D08700]" />
               <p>
                 <strong>User:</strong> {user.username}
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <Mail className="text-red-600" />
+              <Mail className="text-[#D08700]" />
               <p>
                 <strong>Email:</strong> {user.email}
               </p>
@@ -171,27 +166,27 @@ const Booking = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
             <label className="block mb-2 font-medium text-gray-700 flex items-center">
-              <Calendar className="mr-2 text-purple-600" /> Start Date
+              <Calendar className="mr-2 text-[#D08700]" /> Start Date
             </label>
             <input
               type="date"
               name="startDate"
               value={dates.startDate ? dates.startDate.slice(0, 10) : ""}
               onChange={handleChange}
-              className="w-full p-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-300 transition"
+              className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D08700] transition"
               required
             />
           </div>
           <div>
             <label className="block mb-2 font-medium text-gray-700 flex items-center">
-              <Calendar className="mr-2 text-purple-600" /> End Date
+              <Calendar className="mr-2 text-[#D08700]" /> End Date
             </label>
             <input
               type="date"
               name="endDate"
               value={dates.endDate ? dates.endDate.slice(0, 10) : ""}
               onChange={handleChange}
-              className="w-full p-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-300 transition"
+              className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D08700] transition"
               required
             />
           </div>
@@ -200,16 +195,16 @@ const Booking = () => {
         {/* Total Price */}
         <div className="mb-8 text-center bg-gray-100 p-6 rounded-2xl shadow-inner border border-gray-200">
           <label className="block mb-2 font-semibold text-gray-700 text-lg flex justify-center items-center">
-            <DollarSign className="mr-2 text-green-600" /> Total Price
+            <DollarSign className="mr-2 text-[#D08700]" /> Total Price
           </label>
-          <p className="font-extrabold text-4xl text-green-600">
+          <p className="font-extrabold text-4xl text-[#D08700]">
             {price !== null ? `$${price}` : "—"}
           </p>
         </div>
 
         {/* Confirm Button */}
         <button
-          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95"
+          className="w-full bg-[#D08700] text-white font-bold py-3 rounded-xl shadow-md hover:bg-[#b56d00] transition"
           onClick={handleBooking}
           disabled={!!successMessage}
         >

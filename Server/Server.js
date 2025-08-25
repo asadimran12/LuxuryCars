@@ -9,6 +9,7 @@ const carrouter=require("./routers/car_router");
 const uploadroutes=require("./routers/upload_multer");
 const profile=require("./routers/user_router");
 const querry=require("./routers/querry_router");
+const driver=require("./routers/driver_router");
 
 app.use(cors({
   origin: 'http://localhost:5173',
@@ -29,6 +30,7 @@ app.use("/api/car",carrouter)
 app.use("/api", uploadroutes);
 app.use("/api/user",profile)
 app.use("/api/user/querry",querry)
+app.use("/api/driver",driver)
 
 app.get("/", (req, res) => {
   res.send("Server is running!");
