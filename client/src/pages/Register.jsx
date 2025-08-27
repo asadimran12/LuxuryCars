@@ -25,7 +25,8 @@ const Register = () => {
     }
   };
 
-  const handleRegister = async () => {
+  const handleRegister = async (e) => {
+    e.preventDefault();
     try {
       const dataToSend = new FormData();
       for (const key in formData) {
@@ -47,7 +48,7 @@ const Register = () => {
       }
 
       const data = await response.json();
-      console.log(data)
+      console.log(data);
       navigate("/login");
     } catch (error) {
       console.error("Registration Error:", error);
@@ -55,65 +56,68 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-gray-100 to-gray-300">
-      <div className="bg-white p-10 rounded-xl shadow-lg w-full max-w-lg">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-          Create Account
-        </h2>
+    <div className="flex min-h-screen m-10 border rounded-2xl">
+      {/* Left Side */}
+      <div className="hidden md:flex w-1/2 rounded-2xl bg-gradient-to-br from-[#D08700] via-yellow-600 to-[#D08700] items-center justify-center text-white p-10">
+        <div>
+          <h1 className="text-4xl font-bold mb-4">Welcome!</h1>
+          <p className="text-lg">Create an account to get started</p>
+        </div>
+      </div>
 
-        <div className="grid grid-cols-1 gap-4">
-          {[
-            { label: "Username", name: "username", type: "text" },
-            { label: "Email", name: "email", type: "email" },
-            { label: "Password", name: "password", type: "password" },
-            { label: "Phone", name: "phone", type: "tel" },
-            { label: "Date of Birth", name: "dob", type: "date" },
-            { label: "Address", name: "address", type: "text" },
-          ].map(({ label, name, type }) => (
-            <div key={name} className="col-span-2">
-              <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
-                {label}
-              </label>
+      {/* Right Side */}
+      <div className="w-full md:w-1/2 rounded-2xl flex items-center justify-center bg-white">
+        <div className="w-full max-w-md p-8">
+          <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
+            Create Account
+          </h2>
+
+          <form onSubmit={handleRegister} className="space-y-4">
+            {[
+              { label: "Username", name: "username", type: "text" },
+              { label: "Email", name: "email", type: "email" },
+              { label: "Password", name: "password", type: "password" },
+              { label: "Phone", name: "phone", type: "tel" },
+              { label: "Date of Birth", name: "dob", type: "date" },
+              { label: "Address", name: "address", type: "text" },
+            ].map(({ label, name, type }) => (
               <input
+                key={name}
                 type={type}
                 name={name}
-                id={name}
                 value={formData[name]}
                 onChange={handleChange}
                 placeholder={label}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                className="w-full border-b-2 border-gray-300 focus:border-[#D08700] outline-none py-2"
+                required
               />
-            </div>
-          ))}
+            ))}
 
-          <div className="col-span-2">
-            <label htmlFor="avatar" className="block text-sm font-medium text-gray-700 mb-1">
-              Upload Picture
-            </label>
+            {/* Avatar Upload */}
             <input
               type="file"
               name="avatar"
-              id="avatar"
               accept="image/*"
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              className="w-full border-b-2 border-gray-300 focus:border-[#D08700] outline-none py-2"
             />
-          </div>
+
+            {/* Gradient Button */}
+            <button
+              type="submit"
+              className="w-full py-3 rounded-lg bg-gradient-to-r from-[#D08700] via-yellow-600 to-[#D08700] text-white font-semibold hover:opacity-90 transition"
+            >
+              Register
+            </button>
+          </form>
+
+          <p className="text-center mt-6 text-sm text-gray-500">
+            Already have an account?{" "}
+            <Link to="/login" className="text-[#D08700] font-semibold">
+              Sign In
+            </Link>
+          </p>
         </div>
-
-        <button
-          onClick={handleRegister}
-          className="w-full bg-[#F1BC00] hover:bg-yellow-500 text-white font-semibold py-3 rounded-lg transition mt-6"
-        >
-          Register
-        </button>
-
-        <p className="mt-4 text-sm text-gray-600 text-center">
-          Already have an account?{" "}
-          <Link to="/login" className="text-[#F1BC00] font-medium hover:underline">
-            Login
-          </Link>
-        </p>
       </div>
     </div>
   );

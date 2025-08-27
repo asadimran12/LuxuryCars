@@ -35,6 +35,7 @@ import Driversignup from "./pages/Driversignup";
 import Driverlogin from "./pages/Driverlogin";
 import DriverProfile from "./pages/Driverprofile";
 import Driverbookings from "./pages/Driverbookings";
+import BookDriver from "./pages/BookDriver";
 
 // ✅ Redirect Component Based on Role
 const RedirectBasedOnRole = () => {
@@ -78,6 +79,7 @@ const getUserRoutes = () => [
       { path: "/home/contactus", element: <Contact /> },
       { path: "/home/profile", element: <Profile /> },
       { path: "/home/booking/:id", element: <Booking /> },
+      { path: "/home/drivers", element: <BookDriver /> },
     ],
   },
 ];
@@ -88,11 +90,9 @@ const getDriverRoutes = () => [
     path: "/driver",
     element: <Applayout />,
     children: [
-      { index: true, element: <Driver /> }, // default page: /driver
-      { path: "login", element: <Driverlogin /> }, // /driver/login
-      { path: "signup", element: <Driversignup /> }, // /driver/signup
-      { path: "profile", element: <DriverProfile /> }, // /driver/signup
-      { path: "boking", element: <Driverbookings /> }, // /driver/signup
+      { index: true, element: <Driver /> },
+      { path: "profile", element: <DriverProfile /> },
+      { path: "boking", element: <Driverbookings /> },
     ],
   },
 ];
@@ -104,6 +104,8 @@ const App = () => {
     { path: "/", element: <RedirectBasedOnRole /> },
     { path: "/login", element: <Login /> },
     { path: "/forgetpassword", element: <Forgetpassword /> },
+    { path: "/driver/login", element: <Driverlogin /> }, // /driver/login
+    { path: "/driver/signup", element: <Driversignup /> }, // /driver/signup
     { path: "/verifyotp", element: <VerifyOTP /> },
     { path: "/newpassword", element: <Newpassword /> },
     { path: "/register", element: <Register /> },

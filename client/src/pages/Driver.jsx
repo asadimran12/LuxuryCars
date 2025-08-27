@@ -2,6 +2,7 @@ import React from "react";
 import { MapPin, Clock, Route } from "lucide-react";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useAuth } from "../components/Context/Authcontent";
 
 const Driver = () => {
   const today = new Date();
@@ -10,40 +11,37 @@ const Driver = () => {
   const [status, setStatus] = useState("offline");
   const [driver, setDriver] = useState({});
   const [loading, setLoading] = useState(true);
+  const [rides, setRides] = useState([]);
+  const [error, setError] = useState(null);
+  const { token } = useAuth();
 
-  // Multiple trips
-  const recentTrips = [
-    {
-      passenger: "Ahmed Raza",
-      pickup: "Lahore - Gulberg",
-      dropoff: "Islamabad - F-7 Markaz",
-      distance: "375 km",
-      duration: "4h 50m",
-      fare: 9500,
-      date: "Aug 22, 2025",
-    },
-    {
-      passenger: "Sara Ahmed",
-      pickup: "Karachi - Clifton",
-      dropoff: "Hyderabad City",
-      distance: "160 km",
-      duration: "2h 15m",
-      fare: 4200,
-      date: "Aug 20, 2025",
-    },
-    {
-      passenger: "Ali Khan",
-      pickup: "Multan - Cantt",
-      dropoff: "Bahawalpur",
-      distance: "100 km",
-      duration: "1h 30m",
-      fare: 2800,
-      date: "Aug 18, 2025",
-    },
-  ];
+  useEffect(() => {
+    const fetchcompletedrides = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/api/driver/getcompletedrides",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch completed rides");
+        }
 
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGFiMDAzNWMxZmRjZDJlNDE5YTAwZGQiLCJlbWFpbCI6IjIyMDIxNTE5LTE0NkB1b2cuZWR1LnBrIiwicm9sZSI6ImRyaXZlciIsImlhdCI6MTc1NjEwNjEzOCwiZXhwIjoxNzU2MTkyNTM4fQ.TxNcmSUP7ubRYI4cnewlXu_21vuWgmwGXOOS-t4HJW0";
+        const data = await response.json();
+        setRides(data);
+        console.log(data);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+
+    fetchcompletedrides();
+  }, []);
 
   useEffect(() => {
     const fetchDriver = async () => {
@@ -76,6 +74,12 @@ const Driver = () => {
 
     const formData = new FormData();
     formData.append("availabilityStatus", newStatus);
+
+    if (newStatus === "online") {
+      formData.append("onlineAt", new Date().toISOString());
+    } else {
+      formData.append("offlineAt", new Date().toISOString());
+    }
     try {
       const response = await fetch(
         "http://localhost:3000/api/driver/updateprofile",
@@ -101,10 +105,20 @@ const Driver = () => {
     }
   };
 
+  const formatOnlineTime = (ms) => {
+    const totalSeconds = Math.floor(ms / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${hours}h ${minutes}m ${seconds}s`;
+  };
+
   if (loading) {
     return <div className="p-5 text-center">Loading driver...</div>;
   }
 
+  if (error) return <p style={{ color: "red" }}>{error}</p>;
   return (
     <div className="ml-20 mr-20 mt-5 mb-10 space-y-8">
       {/* Header */}
@@ -143,7 +157,9 @@ const Driver = () => {
         </div>
         <div className="p-6 bg-white rounded-2xl shadow text-center">
           <p className="text-gray-500">Online Time</p>
-          <p className="text-3xl font-bold text-blue-600">4h 12m</p>
+          <p className="text-3xl font-bold text-blue-600">
+            {formatOnlineTime(driver.totalOnlineTime)}
+          </p>
           <p className="text-sm text-gray-400">Today</p>
         </div>
         <div className="p-6 bg-white rounded-2xl shadow text-center">
@@ -157,37 +173,45 @@ const Driver = () => {
       <div>
         <h3 className="font-semibold text-xl mb-4">📍 Recent Trips</h3>
         <div className="space-y-4">
-          {recentTrips.map((trip, index) => (
-            <div
-              key={index}
-              className="bg-white p-5 rounded-2xl shadow flex justify-between items-center hover:shadow-md transition"
-            >
-              {/* Left Side - Passenger & Route */}
-              <div>
-                <p className="font-bold text-lg">{trip.passenger}</p>
-                <p className="text-sm text-gray-500 mb-2">{trip.date}</p>
-                <p className="text-sm text-gray-600 flex items-center gap-1">
-                  <MapPin size={14} className="text-green-500" /> {trip.pickup}
-                </p>
-                <p className="text-sm text-gray-600 flex items-center gap-1">
-                  <MapPin size={14} className="text-red-500" /> {trip.dropoff}
-                </p>
-              </div>
+          {rides.length === 0 ? (
+            <p className="text-gray-500">No completed rides yet.</p>
+          ) : (
+            rides.map((ride) => (
+              <div
+                key={ride._id}
+                className="bg-white p-5 rounded-2xl shadow flex justify-between items-center hover:shadow-md transition"
+              >
+                {/* Left Side - Passenger & Route */}
+                <div>
+                  <p className="font-bold text-lg">{ride.passengerName}</p>
+                  <p className="text-sm text-gray-500 mb-2">
+                    {new Date(ride.bookingDate).toLocaleDateString()}
+                  </p>
+                  <p className="text-sm text-gray-600 flex items-center gap-1">
+                    <MapPin size={14} className="text-green-500" />{" "}
+                    {ride.pickupLocation}
+                  </p>
+                  <p className="text-sm text-gray-600 flex items-center gap-1">
+                    <MapPin size={14} className="text-red-500" />{" "}
+                    {ride.dropoffLocation}
+                  </p>
+                </div>
 
-              {/* Right Side - Stats */}
-              <div className="text-right">
-                <p className="flex items-center gap-1 justify-end text-gray-600 text-sm">
-                  <Route size={14} /> {trip.distance}
-                </p>
-                <p className="flex items-center gap-1 justify-end text-gray-600 text-sm">
-                  <Clock size={14} /> {trip.duration}
-                </p>
-                <p className="text-lg font-bold text-green-600 mt-1">
-                  Rs. {trip.fare.toLocaleString()}
-                </p>
+                {/* Right Side - Stats */}
+                <div className="text-right">
+                  <p className="flex items-center gap-1 justify-end text-gray-600 text-sm">
+                    <Route size={14} /> {ride.distance}
+                  </p>
+                  <p className="flex items-center gap-1 justify-end text-gray-600 text-sm">
+                    <Clock size={14} /> {ride.duration}
+                  </p>
+                  <p className="text-lg font-bold text-green-600 mt-1">
+                    Rs. {ride.fare?.toLocaleString()}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
 

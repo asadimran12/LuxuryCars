@@ -11,30 +11,47 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const [authRes, driverRes] = await Promise.all([
+        fetch("http://localhost:3000/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }),
+        fetch("http://localhost:3000/api/driver/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }),
+      ]);
 
-      const data = await response.json();
+      const [authData, driverData] = await Promise.all([
+        authRes.json(),
+        driverRes.json(),
+      ]);
 
-      if (!response.ok) {
-        setError(data.message || "Invalid email or password");
+      if (authRes.ok) {
+        login(authData.token, authData.user.role);
+
+        if (authData.user.role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
+      }
+
+      if (driverRes.ok) {
+        login(driverData.token, "driver");
+        navigate("/driver");
         return;
       }
 
-      // Save token and role in context
-      login(data.token, data.user.role);
-
-      // Navigate based on role
-      if (data.user.role === "admin") {
-        navigate("/admin");
-      } else {
-        navigate("/");
-      }
+      setError(
+        authData.message || driverData.message || "Invalid email or password"
+      );
     } catch (err) {
       console.error("Login failed:", err);
       setError("Something went wrong. Please try again.");
@@ -108,6 +125,14 @@ const Login = () => {
         <p className="mt-2 text-sm text-center">
           <Link to="/forgetpassword" className="text-[#F1BC00] hover:underline">
             Forgot Password?
+          </Link>
+        </p>
+        <p className="mt-2 text-sm text-center">
+          <Link
+            to="/driver/signup"
+            className="text-[#F1BC00] font-medium hover:underline"
+          >
+            Join as Driver
           </Link>
         </p>
       </div>

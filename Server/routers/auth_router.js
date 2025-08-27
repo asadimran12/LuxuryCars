@@ -9,7 +9,9 @@ const {
   SendOTP,
   VerifyOTP,
   ResetPassword,
-  Bookdriver
+  Bookdriver,
+  GetSpecificlocationdriver,
+  GetSpecificDriver
 } = require("../controllers/auth-controller");
 const upload = require("../middleware/multer");
 const adminmiddleware = require("../middleware/admin_middleware");
@@ -26,6 +28,8 @@ router.get("/users", adminmiddleware, Admingetallusers);
 router.get("/users/:id", adminmiddleware, Getspecificuser);
 router.delete("/users/:id", adminmiddleware, Deletespecificuser);
 router.post("/driverbook/:id", authmiddleware, Bookdriver);
+router.post("/driverlocation", authmiddleware, GetSpecificlocationdriver);
+router.get("/driverprofile/:id", authmiddleware, GetSpecificDriver);
 
 router.put("/resetpassword", ResetPassword);
 router.post("/sendOTP", SendOTP);

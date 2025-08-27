@@ -46,6 +46,11 @@ const driverBookingSchema = new mongoose.Schema(
       enum: ["pending", "paid", "failed"],
       default: "pending",
     },
+    rating: {
+      score: { type: Number, min: 0, max: 5, default: 0 },
+      feedback: { type: String, trim: true, default: "" },
+    },
+
     bookingDate: {
       type: Date,
       default: Date.now,

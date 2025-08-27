@@ -5,7 +5,8 @@ const {
   DriverLogin,
   DriverRegister,
   Getallbooking,
-  UpdateDriverprofile
+  UpdateDriverprofile,
+  Completedrides,
 } = require("../controllers/Driver_controller");
 
 const upload = require("../middleware/multer");
@@ -37,8 +38,14 @@ router.get("/driverprofile", Drivermiddleware, async (req, res) => {
   }
 });
 
-router.put("/updateprofile", upload.single("profilePhoto"),Drivermiddleware,UpdateDriverprofile);
+router.put(
+  "/updateprofile",
+  upload.single("profilePhoto"),
+  Drivermiddleware,
+  UpdateDriverprofile
+);
 
 router.get("/getallbookings", Drivermiddleware, Getallbooking);
+router.get("/getcompletedrides", Drivermiddleware, Completedrides);
 
 module.exports = router;

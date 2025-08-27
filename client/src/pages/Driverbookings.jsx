@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useAuth } from "../components/Context/Authcontent";
 
 const Driverbookings = () => {
+  const {token}=useAuth();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGFiMDAzNWMxZmRjZDJlNDE5YTAwZGQiLCJlbWFpbCI6IjIyMDIxNTE5LTE0NkB1b2cuZWR1LnBrIiwicm9sZSI6ImRyaXZlciIsImlhdCI6MTc1NjA5ODg0MywiZXhwIjoxNzU2MTg1MjQzfQ.ZrIXuuYEK2tj4NN8DPbhrJsV_h2xBVzl2IDabVs6ay0";
-
-  // Fetch bookings from API
   useEffect(() => {
     const fetchBookings = async () => {
       try {
@@ -21,7 +18,7 @@ const Driverbookings = () => {
           }
         );
         const data = await response.json();
-        setBookings(data.getbookings);
+        setBookings(data.bookings);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching bookings:", error);

@@ -1,7 +1,8 @@
 import React from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { FiMessageSquare } from "react-icons/fi";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaCar } from "react-icons/fa"; // 🚗 add car icon
 import { useAuth } from "../Context/Authcontent";
 
 const Header = () => {
@@ -46,21 +47,42 @@ const Header = () => {
 
         {/* Right Side */}
         <div className="flex gap-4 items-center">
-          {/* Book Now Button */}
+          {/* Book a Driver */}
           <NavLink
-            to="/driver"
-            className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg shadow-md transition duration-200"
+            to="/home/drivers"
+            className="flex items-center gap-2 bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg shadow-md transition duration-200 font-medium"
           >
-            Join As Driver
+            <FaCar size={18} />
+            Book a Driver
+          </NavLink>
+
+          {/* Show "Join As Driver" only if NOT logged in */}
+          {!token && (
+            <NavLink
+              to="/driver/signup"
+              className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg shadow-md transition duration-200"
+            >
+              Join As Driver
+            </NavLink>
+          )}
+
+          <NavLink
+            to="/chat"
+            className="flex items-center gap-2 bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow-sm transition duration-200 font-medium"
+          >
+            <FiMessageSquare size={18} />
+            Chat
           </NavLink>
 
           {/* Profile */}
-          <Link to="/home/profile">
-            <FaUser
-              size={28}
-              className="bg-yellow-600 text-white p-1 rounded-full"
-            />
-          </Link>
+          {token && (
+            <Link to="/home/profile">
+              <FaUser
+                size={28}
+                className="bg-yellow-600 text-white p-1 rounded-full"
+              />
+            </Link>
+          )}
 
           {/* Auth */}
           {token ? (

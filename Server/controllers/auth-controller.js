@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 const User = require("../model/auth_model");
 const OTP_model = require("../model/OTP_model");
+const Driver = require("../model/Driver_model");
 const Driverbook_model = require("../model/Driver_booking_model");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
@@ -328,6 +329,52 @@ const Bookdriver = async (req, res) => {
   }
 };
 
+const GetSpecificlocationdriver = async (req, res) => {
+  try {
+    const { currentlocation } = req.body;
+
+    if (!currentlocation || currentlocation.trim() === "") {
+      return res.status(400).json({ message: "Location is required" });
+    }
+
+    // Trim and prepare regex (handles extra spaces, newlines)
+    const searchLocation = currentlocation.trim();
+    const regex = new RegExp(searchLocation.replace(/\s+/g, "\\s*"), "i");
+
+    // Find drivers online in that location
+    const drivers = await Driver.find({
+      currentlocation: { $regex: regex },
+      availabilityStatus: "online",
+    });
+
+    if (drivers.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No driver is present at this location" });
+    }
+
+    return res.status(200).json(drivers);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const GetSpecificDriver = async (req, res) => {
+  try {
+    const driverid = req.params.id;
+
+    const existdriver = await Driver.findById(driverid).select("-password");
+
+    if (!existdriver) {
+      return res.status(404).json({ message: "No driver found" });
+    }
+
+    return res.status(200).json(existdriver);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   Login,
   Register,
@@ -338,4 +385,6 @@ module.exports = {
   VerifyOTP,
   ResetPassword,
   Bookdriver,
+  GetSpecificlocationdriver,
+  GetSpecificDriver,
 };

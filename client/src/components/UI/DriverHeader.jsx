@@ -1,9 +1,16 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { MessageCircle } from "lucide-react"; // chat icon
+import { useAuth } from "../Context/Authcontent";
 
 const DriverHeader = () => {
   const navigate = useNavigate();
+  const { token, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout(); // clear token + role
+    navigate("/login"); // redirect to login page
+  };
 
   return (
     <header className="bg-gray-900 text-white shadow-md">
@@ -47,12 +54,14 @@ const DriverHeader = () => {
           </button>
 
           {/* Logout button */}
-          <button
-            onClick={() => navigate("login")}
-            className="bg-yellow-400 text-black px-4 py-2 rounded-lg hover:bg-yellow-500 transition"
-          >
-            Login
-          </button>
+          {token && (
+            <button
+              onClick={handleLogout}
+              className="bg-yellow-400 text-black px-4 py-2 rounded-lg hover:bg-yellow-500 transition"
+            >
+              logout
+            </button>
+          )}
         </nav>
       </div>
     </header>

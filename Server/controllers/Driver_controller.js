@@ -52,6 +52,7 @@ const DriverRegister = async (req, res) => {
       dateOfBirth,
       nationalID,
       address,
+      currentlocation
     } = req.body;
 
     const profilePhoto = req.file ? `/uploads/${req.file.filename}` : null;
@@ -61,7 +62,7 @@ const DriverRegister = async (req, res) => {
     if (existUser) {
       return res
         .status(409)
-        .json({ message: "User already exists with this email." });
+        .json({ message: "Driver already exists with this email." });
     }
 
     const newDriver = new Driver({
@@ -74,12 +75,13 @@ const DriverRegister = async (req, res) => {
       address,
       nationalID,
       profilePhoto,
+      currentlocation
     });
 
     await newDriver.save();
 
     res.status(201).json({
-      message: "User registered successfully",
+      message: "Driver registered successfully",
       user: {
         _id: newDriver._id,
         fullName: newDriver.fullName,
@@ -95,14 +97,17 @@ const DriverRegister = async (req, res) => {
 
 const Getallbooking = async (req, res) => {
   try {
-    const getbookings = await Driverbooking.find();
-    if (!getbookings) {
-      return res.status(409).json({ message: "Bookings not found" });
-    }
+    const driverId = req.user.id;
 
-    res.status(201).json({
-      getbookings,
-    });
+    const getbookings = await Driverbooking.find({ driver: driverId });
+
+    res.status(200).json(
+      {
+        success: true,
+        count: getbookings.length,
+        bookings: getbookings,
+      } || []
+    );
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -121,7 +126,25 @@ const UpdateDriverprofile = async (req, res) => {
       dateOfBirth,
       address,
       availabilityStatus,
+      onlineAt,
+      offlineAt,
     } = req.body;
+
+    const driver = await Driver.findById(driverId);
+    if (!driver) return res.status(404).json({ message: "Driver not found" });
+
+    if (availabilityStatus === "online") {
+      driver.onlineAt = new Date(onlineAt || Date.now());
+      driver.offlineAt = null;
+    }
+    if (availabilityStatus === "offline") {
+      driver.offlineAt = new Date(offlineAt || Date.now());
+
+      const duration = driver.offlineAt - driver.onlineAt; // in ms
+      driver.totalOnlineTime = (driver.totalOnlineTime || 0) + duration; // accumulate
+      driver.onlineAt = null;
+      driver.offlineAt = null;
+    }
 
     // Build update object dynamically
     const updateFields = {
@@ -133,6 +156,9 @@ const UpdateDriverprofile = async (req, res) => {
       ...(dateOfBirth && { dateOfBirth }),
       ...(address && { address }),
       ...(availabilityStatus && { availabilityStatus }),
+      onlineAt: driver.onlineAt,
+      offlineAt: driver.offlineAt,
+      totalOnlineTime: driver.totalOnlineTime,
     };
 
     // ✅ handle avatar if file uploaded
@@ -147,7 +173,7 @@ const UpdateDriverprofile = async (req, res) => {
     );
 
     if (!updatedDriver) {
-      return res.status(404).json({ message: "Driver not found" });
+      return res.status(404).json({ message: "Driver not updated" });
     }
 
     res.json({
@@ -155,7 +181,21 @@ const UpdateDriverprofile = async (req, res) => {
       driver: updatedDriver,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const Completedrides = async (req, res) => {
+  try {
+    const driverid = req.user.id;
+
+    const rides = await Driverbooking.find({
+      status: "completed",
+      driver: driverid,
+    });
+    return res.status(200).json(rides || []);
+  } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
@@ -165,4 +205,5 @@ module.exports = {
   DriverRegister,
   Getallbooking,
   UpdateDriverprofile,
+  Completedrides,
 };

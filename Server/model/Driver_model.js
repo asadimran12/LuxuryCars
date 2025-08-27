@@ -12,6 +12,7 @@ const driverSchema = new mongoose.Schema(
     nationalID: { type: String, required: true, unique: true },
     dateOfBirth: { type: Date, required: true },
     address: { type: String, required: true },
+    currentlocation: { type: String, required: true },
 
     profilePhoto: { type: String, default: "" },
 
@@ -30,9 +31,12 @@ const driverSchema = new mongoose.Schema(
     rating: { type: Number, default: 0 },
     totalTrips: { type: Number, default: 0 },
 
-    lastLogin: { type: Date },
+    onlineAt: { type: Date },
+    offlineAt: { type: Date },
+    totalOnlineTime: { type: Number, default: 0 },
     role: { type: String, enum: ["driver", "admin"], default: "driver" },
   },
+
   { timestamps: true }
 );
 

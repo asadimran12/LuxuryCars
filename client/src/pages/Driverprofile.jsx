@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "../components/Context/Authcontent";
 
 const DriverProfile = () => {
   const [driver, setDriver] = useState({});
+  const {token}=useAuth();
   const [loading, setLoading] = useState(true);
-
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGFiMDAzNWMxZmRjZDJlNDE5YTAwZGQiLCJlbWFpbCI6IjIyMDIxNTE5LTE0NkB1b2cuZWR1LnBrIiwicm9sZSI6ImRyaXZlciIsImlhdCI6MTc1NjEwMTE4OCwiZXhwIjoxNzU2MTg3NTg4fQ.O5-UUjVJKQUpbACViIFJA5C63hTItWooJzRzaIQMLWs";
-
   useEffect(() => {
     const fetchDriver = async () => {
       try {
