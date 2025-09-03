@@ -122,6 +122,16 @@ const Driversignup = () => {
               className="w-full border-b-2 border-gray-300 focus:border-yellow-500 outline-none py-2"
               required
             />
+
+            <input
+              type="text"
+              name="currentlocation"
+              placeholder="Enter your Current location City Name"
+              onChange={handleChange}
+              className="w-full border-b-2 border-gray-300 focus:border-yellow-500 outline-none py-2"
+              required
+            />
+
             <input
               type="password"
               name="password"

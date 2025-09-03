@@ -33,6 +33,7 @@ const Login = async (req, res) => {
         username: existuser.username,
         email: existuser.email,
         role: existuser.role,
+        id: existuser._id,
       },
       token,
     });
@@ -333,17 +334,14 @@ const GetSpecificlocationdriver = async (req, res) => {
   try {
     const { currentlocation } = req.body;
 
+    console.log(currentlocation);
+
     if (!currentlocation || currentlocation.trim() === "") {
       return res.status(400).json({ message: "Location is required" });
     }
-
-    // Trim and prepare regex (handles extra spaces, newlines)
-    const searchLocation = currentlocation.trim();
-    const regex = new RegExp(searchLocation.replace(/\s+/g, "\\s*"), "i");
-
     // Find drivers online in that location
     const drivers = await Driver.find({
-      currentlocation: { $regex: regex },
+      currentlocation,
       availabilityStatus: "online",
     });
 
@@ -369,11 +367,13 @@ const GetSpecificDriver = async (req, res) => {
       return res.status(404).json({ message: "No driver found" });
     }
 
-    return res.status(200).json(existdriver);
+    // 👇 wrap the response
+    return res.status(200).json({ driver: existdriver });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
+
 
 module.exports = {
   Login,

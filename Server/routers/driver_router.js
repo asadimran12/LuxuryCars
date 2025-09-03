@@ -2,15 +2,15 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  DriverLogin,
+   DriverLogin,
   DriverRegister,
-  Getallbooking,
-  UpdateDriverprofile,
-  Completedrides,
+  GetDriverProfile,
+  GetAllBooking,
+  UpdateDriverProfile,
+  CompletedRides,
 } = require("../controllers/Driver_controller");
 
 const upload = require("../middleware/multer");
-const adminmiddleware = require("../middleware/admin_middleware");
 const Drivermiddleware = require("../middleware/driver_middleware");
 
 const {
@@ -28,7 +28,7 @@ router.post(
 
 router.get("/driverprofile", Drivermiddleware, async (req, res) => {
   try {
-    const user = req.user;
+    const user = req.driver;
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -42,10 +42,10 @@ router.put(
   "/updateprofile",
   upload.single("profilePhoto"),
   Drivermiddleware,
-  UpdateDriverprofile
+  UpdateDriverProfile
 );
 
-router.get("/getallbookings", Drivermiddleware, Getallbooking);
-router.get("/getcompletedrides", Drivermiddleware, Completedrides);
+router.get("/getallbookings", Drivermiddleware, GetAllBooking);
+router.get("/getcompletedrides", Drivermiddleware, CompletedRides);
 
 module.exports = router;

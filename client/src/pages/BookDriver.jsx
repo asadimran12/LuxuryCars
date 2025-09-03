@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../components/Context/Authcontent";
 import { MessageCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const BookDriver = () => {
   const { token } = useAuth();
@@ -8,6 +9,7 @@ const BookDriver = () => {
   const [drivers, setDrivers] = useState([]);
   const [driverprofile, setdriverprofile] = useState({});
   const [selectedDriver, setSelectedDriver] = useState(null);
+  const navigate = useNavigate();
 
   const handleprofile = async (id) => {
     try {
@@ -63,7 +65,7 @@ const BookDriver = () => {
             type="text"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            placeholder="Enter your location e.g (Barket Market, Lahore)"
+            placeholder="Enter your location City Name"
             className="border px-3 py-2 rounded w-80"
           />
           <button
@@ -218,7 +220,20 @@ const BookDriver = () => {
                 <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg shadow-md transition duration-200 font-semibold">
                   Book
                 </button>
-                <button className="flex items-center gap-2 bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow-sm transition duration-200 font-medium">
+                <button
+                  onClick={() => {
+                    if (driverprofile?._id) {
+                      console.log("Driver ID:", driverprofile._id);
+                      // Example: navigate to chat page with driverId
+                      navigate(`/home/chat/${driverprofile._id}`, {
+                        state: { driverId: driverprofile._id },
+                      });
+                    } else {
+                      console.log("Driver not loaded yet");
+                    }
+                  }}
+                  className="flex items-center gap-2 bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow-sm transition duration-200 font-medium"
+                >
                   <MessageCircle className="w-5 h-5 text-gray-600" />
                   Chat
                 </button>

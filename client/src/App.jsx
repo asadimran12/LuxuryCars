@@ -36,6 +36,8 @@ import Driverlogin from "./pages/Driverlogin";
 import DriverProfile from "./pages/Driverprofile";
 import Driverbookings from "./pages/Driverbookings";
 import BookDriver from "./pages/BookDriver";
+import Chat from "./pages/Chat";
+import AllChats from "./pages/AllChats";
 
 // ✅ Redirect Component Based on Role
 const RedirectBasedOnRole = () => {
@@ -80,6 +82,8 @@ const getUserRoutes = () => [
       { path: "/home/profile", element: <Profile /> },
       { path: "/home/booking/:id", element: <Booking /> },
       { path: "/home/drivers", element: <BookDriver /> },
+      { path: "/home/chat/:driverId", element: <Chat /> },
+      { path: "/home/Allchats", element: <AllChats /> },
     ],
   },
 ];
@@ -93,6 +97,8 @@ const getDriverRoutes = () => [
       { index: true, element: <Driver /> },
       { path: "profile", element: <DriverProfile /> },
       { path: "boking", element: <Driverbookings /> },
+      { path: "chat", element: <Chat /> },
+      { path: "Allchats", element: <AllChats /> },
     ],
   },
 ];

@@ -12,7 +12,7 @@ const authenticate = async (req, res, next) => {
      return  res.status(401).json({ error: "No user Found" });
     }
 
-    req.user = user;
+    req.driver = user;
     next();
   } catch (error) {
     return res.status(401).json({ message: "Invalid token" });

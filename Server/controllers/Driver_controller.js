@@ -1,209 +1,164 @@
-const { validationResult } = require("express-validator");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const Driver = require("../model/Driver_model");
 const Driverbooking = require("../model/Driver_booking_model");
-const OTP_model = require("../model/OTP_model");
-const bcrypt = require("bcryptjs");
-const nodemailer = require("nodemailer");
 
+// ===============================
+// Driver Login
+// ===============================
 const DriverLogin = async (req, res) => {
-  const error = validationResult(req);
-  if (!error.isEmpty()) {
-    return res.status(400).json({ errors: error.array() });
-  }
   try {
     const { email, password } = req.body;
-    const existuser = await Driver.findOne({ email }).select("+password");
 
+    const existuser = await Driver.findOne({ email }).select("+password");
     if (!existuser) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(404).json({ message: "Driver not found" });
     }
 
     const isMatch = await bcrypt.compare(password, existuser.password);
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = existuser.generateToken();
+    const token = jwt.sign(
+      { id: existuser._id, role: "Driver" },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
 
-    res.status(200).json({
-      message: "Login successful",
-      user: {
-        fullname: existuser.fullName,
-        email: existuser.email,
-        role: existuser.role,
-      },
-      token,
-    });
-  } catch (error) {}
+    res.status(200).json({ token, driver: existuser });
+  } catch (error) {
+    console.error("Driver login error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
+// ===============================
+// Driver Register
+// ===============================
 const DriverRegister = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
   try {
-    const {
-      fullName,
-      email,
-      password,
-      phone,
-      licenseNumber,
-      dateOfBirth,
-      nationalID,
-      address,
-      currentlocation
-    } = req.body;
-
+    const { fullName, email, password, phone, licenseNumber } = req.body;
     const profilePhoto = req.file ? `/uploads/${req.file.filename}` : null;
 
-    // ✅ Check if user already exists
-    const existUser = await Driver.findOne({ email });
-    if (existUser) {
-      return res
-        .status(409)
-        .json({ message: "Driver already exists with this email." });
+    const exist = await Driver.findOne({ email });
+    if (exist) {
+      return res.status(400).json({ message: "Email already registered" });
     }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     const newDriver = new Driver({
       fullName,
       email,
-      password,
+      password: hashedPassword,
       phone,
       licenseNumber,
-      dateOfBirth,
-      address,
-      nationalID,
       profilePhoto,
-      currentlocation
     });
 
     await newDriver.save();
-
-    res.status(201).json({
-      message: "Driver registered successfully",
-      user: {
-        _id: newDriver._id,
-        fullName: newDriver.fullName,
-        email: newDriver.email,
-        role: newDriver.role,
-        createdAt: newDriver.createdAt,
-      },
-    });
+    res.status(201).json({ message: "Driver registered successfully" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Driver register error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-const Getallbooking = async (req, res) => {
+// ===============================
+// Get Driver Profile
+// ===============================
+const GetDriverProfile = async (req, res) => {
   try {
-    const driverId = req.user.id;
+    const driverId = req.params.id || req.user.id;
+    const driver = await Driver.findById(driverId).select("-password");
 
-    const getbookings = await Driverbooking.find({ driver: driverId });
+    if (!driver) {
+      return res.status(404).json({ message: "Driver not found" });
+    }
 
-    res.status(200).json(
-      {
-        success: true,
-        count: getbookings.length,
-        bookings: getbookings,
-      } || []
-    );
+    res.status(200).json(driver);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Get driver profile error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-const UpdateDriverprofile = async (req, res) => {
+// ===============================
+// Get All Bookings for Driver
+// ===============================
+const GetAllBooking = async (req, res) => {
   try {
-    const driverId = req.user.id;
+    const driverId = req.driver.id;
+    const bookings = await Driverbooking.find({ driver: driverId });
+    res.status(200).json({ bookings });
+  } catch (error) {
+    console.error("Get all booking error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
-    const {
-      fullName,
-      email,
-      phone,
-      licenseNumber,
-      nationalID,
-      dateOfBirth,
-      address,
-      availabilityStatus,
-      onlineAt,
-      offlineAt,
-    } = req.body;
+// ===============================
+// Update Driver Profile
+// ===============================
+const UpdateDriverProfile = async (req, res) => {
+  try {
+    const driverId = req.driver.id;
+    const { availabilityStatus } = req.body;
 
     const driver = await Driver.findById(driverId);
-    if (!driver) return res.status(404).json({ message: "Driver not found" });
-
-    if (availabilityStatus === "online") {
-      driver.onlineAt = new Date(onlineAt || Date.now());
-      driver.offlineAt = null;
+    if (!driver) {
+      return res.status(404).json({ message: "Driver not found" });
     }
-    if (availabilityStatus === "offline") {
-      driver.offlineAt = new Date(offlineAt || Date.now());
 
-      const duration = driver.offlineAt - driver.onlineAt; // in ms
-      driver.totalOnlineTime = (driver.totalOnlineTime || 0) + duration; // accumulate
+    // Handle availability status logic
+    if (availabilityStatus === "online" && !driver.onlineAt) {
+      driver.onlineAt = new Date();
+      driver.availabilityStatus = "online";
+    } else if (availabilityStatus === "offline" && driver.onlineAt) {
+      const offlineAt = new Date();
+      const duration = offlineAt - driver.onlineAt; // in ms
+      driver.totalOnlineTime = (driver.totalOnlineTime || 0) + duration;
       driver.onlineAt = null;
-      driver.offlineAt = null;
+      driver.availabilityStatus = "offline";
     }
 
-    // Build update object dynamically
-    const updateFields = {
-      ...(fullName && { fullName }),
-      ...(email && { email }),
-      ...(phone && { phone }),
-      ...(licenseNumber && { licenseNumber }),
-      ...(nationalID && { nationalID }),
-      ...(dateOfBirth && { dateOfBirth }),
-      ...(address && { address }),
-      ...(availabilityStatus && { availabilityStatus }),
-      onlineAt: driver.onlineAt,
-      offlineAt: driver.offlineAt,
-      totalOnlineTime: driver.totalOnlineTime,
-    };
-
-    // ✅ handle avatar if file uploaded
-    if (req.file) {
-      updateFields.profilePhoto = `/uploads/${req.file.filename}`;
-    }
-
-    const updatedDriver = await Driver.findByIdAndUpdate(
-      driverId,
-      { $set: updateFields },
-      { new: true } // return updated doc
-    );
-
-    if (!updatedDriver) {
-      return res.status(404).json({ message: "Driver not updated" });
-    }
-
-    res.json({
-      message: "Driver profile updated successfully",
-      driver: updatedDriver,
-    });
+    await driver.save();
+    res
+      .status(200)
+      .json({ message: "Driver profile updated successfully", driver });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: error.message });
+    console.error("Update driver profile error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-const Completedrides = async (req, res) => {
+// ===============================
+// Get Completed Rides
+// ===============================
+const CompletedRides = async (req, res) => {
   try {
-    const driverid = req.user.id;
-
+    const driverId = req.driver._id;
     const rides = await Driverbooking.find({
       status: "completed",
-      driver: driverid,
+      driver: driverId,
     });
-    return res.status(200).json(rides || []);
+
+    res.status(200).json(rides);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    console.error("Completed rides error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
 module.exports = {
   DriverLogin,
   DriverRegister,
-  Getallbooking,
-  UpdateDriverprofile,
-  Completedrides,
+  GetDriverProfile,
+  GetAllBooking,
+  UpdateDriverProfile,
+  CompletedRides,
 };

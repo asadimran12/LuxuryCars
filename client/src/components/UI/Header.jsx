@@ -48,13 +48,15 @@ const Header = () => {
         {/* Right Side */}
         <div className="flex gap-4 items-center">
           {/* Book a Driver */}
-          <NavLink
-            to="/home/drivers"
-            className="flex items-center gap-2 bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg shadow-md transition duration-200 font-medium"
-          >
-            <FaCar size={18} />
-            Book a Driver
-          </NavLink>
+          {token && (
+            <NavLink
+              to="/home/drivers"
+              className="flex items-center gap-2 bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg shadow-md transition duration-200 font-medium"
+            >
+              <FaCar size={18} />
+              Book a Driver
+            </NavLink>
+          )}
 
           {/* Show "Join As Driver" only if NOT logged in */}
           {!token && (
@@ -67,7 +69,7 @@ const Header = () => {
           )}
 
           <NavLink
-            to="/chat"
+            to="/home/Allchats"
             className="flex items-center gap-2 bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow-sm transition duration-200 font-medium"
           >
             <FiMessageSquare size={18} />

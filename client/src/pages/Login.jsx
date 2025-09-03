@@ -34,7 +34,7 @@ const Login = () => {
       ]);
 
       if (authRes.ok) {
-        login(authData.token, authData.user.role);
+        login(authData.token, authData.user.role,authData.user.id);
 
         if (authData.user.role === "admin") {
           navigate("/admin");
@@ -44,7 +44,7 @@ const Login = () => {
       }
 
       if (driverRes.ok) {
-        login(driverData.token, "driver");
+        login(driverData.token, "driver",driverData.driver._id);
         navigate("/driver");
         return;
       }
