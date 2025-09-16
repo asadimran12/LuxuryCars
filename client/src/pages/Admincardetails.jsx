@@ -13,9 +13,7 @@ const AdminCarDetails = ({ id, onClose }) => {
         },
       });
       const data = await res.json();
-      console.log(data)
       setCar(data);
-      console.log(data)
     } catch (error) {
       console.error("Error fetching car details:", error);
     }
@@ -28,49 +26,55 @@ const AdminCarDetails = ({ id, onClose }) => {
   if (!car) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500/50">
-      <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative">
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-3 text-gray-600 hover:text-black text-2xl"
-        >
-          &times;
-        </button>
+    <div onClick={onClose} className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden  animate-fadeIn">
+      
 
-        <h1 className="text-xl font-semibold mb-4 text-center text-gray-800">
-          Car Details
-        </h1>
+        {/* Car Image */}
+        {car.image && (
+          <div className="w-full h-64 overflow-hidden">
+            <img
+              src={`http://localhost:3000${car.image}`}
+              alt={car.name}
+              className="w-full h-full object-cover hover:scale-105 transition-transform"
+            />
+          </div>
+        )}
 
-        <div className="space-y-3 text-gray-700">
-          <p>
-            <strong>Name:</strong> {car.name}
-          </p>
-          <p>
-            <strong>Brand:</strong> {car.brand}
-          </p>
-          <p>
-            <strong>Price Per Day:</strong> Rs. {car.pricePerDay}
-          </p>
-          <p>
-            <strong>Availability:</strong>{" "}
-            {car.availability ? "Available" : "Booked"}
-          </p>
-          <p>
-            <strong>Description:</strong> {car.description}
-          </p>
-           <p>
-            <strong>Features:</strong> {car.features}
-          </p>
-          {car.image && (
-            <div className="mt-2">
-              <strong>Image:</strong>
-              <img
-                src={`http://localhost:3000${car.image}`}
-                alt={car.name}
-                className="w-full rounded-md mt-1"
-              />
+        {/* Content */}
+        <div className="p-6">
+          <h1 className="text-2xl font-bold text-gray-800 text-center">
+            {car.name}
+          </h1>
+          <p className="text-center text-gray-500 mb-4">{car.brand}</p>
+
+          {/* Details Grid */}
+          <div className="grid grid-cols-2 gap-4 text-gray-700">
+            <div className="bg-gray-50 p-3 rounded-md shadow-sm">
+              <strong>Price/Day:</strong>
+              <p className="text-green-600 font-semibold">
+                Rs. {car.pricePerDay}
+              </p>
             </div>
-          )}
+            <div className="bg-gray-50 p-3 rounded-md shadow-sm">
+              <strong>Availability:</strong>
+              <p
+                className={`font-semibold ${
+                  car.availability ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {car.availability ? "Available" : "Booked"}
+              </p>
+            </div>
+            <div className="bg-gray-50 p-3 rounded-md shadow-sm col-span-2">
+              <strong>Description:</strong>
+              <p>{car.description || "No description provided."}</p>
+            </div>
+            <div className="bg-gray-50 p-3 rounded-md shadow-sm col-span-2">
+              <strong>Features:</strong>
+              <p>{car.features || "No features listed."}</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

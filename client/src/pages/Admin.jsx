@@ -12,6 +12,9 @@ const Admin = () => {
     navigate("/login");
   };
 
+  const showroomownerName =
+    localStorage.getItem("showroomownerName") || "Admin";
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
@@ -21,7 +24,9 @@ const Admin = () => {
       <main className="flex-1 ml-16 md:ml-52 p-8 transition-all duration-300">
         <div className="bg-white p-6 rounded-xl shadow-md mb-6 flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-blue-800">Welcome, Admin</h1>
+            <h1 className="text-3xl font-bold text-blue-800">
+              Welcome,{showroomownerName}{" "}
+            </h1>
             <p className="text-sm text-gray-600 mt-1">
               Manage your dashboard from the options on the left.
             </p>
@@ -36,7 +41,7 @@ const Admin = () => {
 
         {/* Placeholder or main dashboard content */}
         <div className="text-gray-700 text-lg">
-          You are now logged into the admin panel.
+          You are now logged into the showroom panel.
         </div>
       </main>
     </div>

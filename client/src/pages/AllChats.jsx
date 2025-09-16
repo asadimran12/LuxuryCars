@@ -6,13 +6,14 @@ const AllChats = () => {
   const { token, role } = useAuth();
   const [chats, setChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
+  const [status, setStatus] = useState(null);
 
   // ✅ Fetch chat partners
   useEffect(() => {
     const fetchChats = async () => {
       try {
         const endpoint =
-          role === "Driver"
+          role === "driver"
             ? "http://localhost:3000/api/messages/chat/driver"
             : "http://localhost:3000/api/messages/chat/user";
 
@@ -23,9 +24,8 @@ const AllChats = () => {
           },
         });
 
-        let data = await res.json();
+        const data = await res.json();
 
-        // 🔹 Fetch extra details (name + image) for each partner
         const detailedChats = await Promise.all(
           data.map(async (chat) => {
             const partnerId = chat.partner.id;
@@ -35,20 +35,29 @@ const AllChats = () => {
             const detailsEndpoint =
               partnerType === "Driver"
                 ? `http://localhost:3000/api/auth/driverprofile/${partnerId}`
-                : `http://localhost:3000/api/users/${partnerId}`;
+                : `http://localhost:3000/api/auth/driver/users/${partnerId}`;
 
             const detailsRes = await fetch(detailsEndpoint, {
               headers: { Authorization: `Bearer ${token}` },
             });
             const details = await detailsRes.json();
+            if (partnerType === "Driver")
+              setStatus(details.driver.availabilityStatus || null);
+            else if (partnerType === "User")
+              setStatus(details.finduser.availabilityStatus || null);
 
             return {
               ...chat,
               partner: {
                 ...chat.partner,
-                fullName: details.driver.fullName || "Unknown",
+                fullName:
+                  partnerType === "Driver"
+                    ? details?.driver?.fullName || "Unknown"
+                    : details?.finduser?.username || "Unknown",
                 image: `http://localhost:3000${
-                  details.driver.profilePhoto || "/default-avatar.png"
+                  partnerType === "Driver"
+                    ? details?.driver?.profilePhoto || "/default-avatar.png"
+                    : details?.finduser?.avatar || "/default-avatar.png"
                 }`,
               },
             };
@@ -127,6 +136,8 @@ const AllChats = () => {
       <div style={{ flex: 1 }}>
         {selectedChat ? (
           <Chat
+            partner={selectedChat}
+            status={status}
             driverId={selectedChat.type === "Driver" ? selectedChat.id : null}
             userId={selectedChat.type === "User" ? selectedChat.id : null}
           />

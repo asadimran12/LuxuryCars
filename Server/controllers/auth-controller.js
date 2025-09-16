@@ -3,6 +3,7 @@ const User = require("../model/auth_model");
 const OTP_model = require("../model/OTP_model");
 const Driver = require("../model/Driver_model");
 const Driverbook_model = require("../model/Driver_booking_model");
+const showroom = require("../model/Showroomowner_model");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 
@@ -374,6 +375,62 @@ const GetSpecificDriver = async (req, res) => {
   }
 };
 
+const GetallDrivers = async (req,res) => {
+  try {
+    const drivers = await Driver.find().select("-password");
+    if (!drivers) {
+      return res.status(404).json({ message: "No drivers available" });
+    }
+
+    return res.status(200).json({ drivers });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const Getallshowrooms = async (req, res) => {
+  try {
+    const showrooms = await showroom.find().select("-password");
+    if (!showrooms) {
+      return res.status(404).json({ message: "No showrooms available" });
+    }
+    return res.status(200).json({ showrooms });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const GetSpecificShowroom = async (req, res) => {
+  try {
+    const showroomid = req.params.id;
+
+    const specificshowroom = await showroom
+      .findById(showroomid)
+      .select("-password");
+
+    if (!specificshowroom) {
+      return res.status(404).json({ message: "No showroom found" });
+    }
+    return res.status(200).json({ specificshowroom });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const GetAdminprofile = async (req, res) => {
+  try {
+    const admin = await User.findOne({ role: "admin" });
+
+    if (admin) {
+      return res.status(200).json({ admin });
+    }
+
+    return res.status(404).json({ message: "No admin profile found" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 
 module.exports = {
   Login,
@@ -387,4 +444,8 @@ module.exports = {
   Bookdriver,
   GetSpecificlocationdriver,
   GetSpecificDriver,
+  GetallDrivers,
+  Getallshowrooms,
+  GetSpecificShowroom,
+  GetAdminprofile,
 };

@@ -1,4 +1,5 @@
 import React from "react";
+import FAQ from "./FAQ";
 
 const Services = () => {
   return (
@@ -42,6 +43,7 @@ const Services = () => {
           ))}
         </div>
       </div>
+      <FAQ/>
     </section>
   );
 };

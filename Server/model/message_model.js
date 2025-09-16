@@ -29,7 +29,7 @@ const messageSchema = new Mongoose.Schema(
     text: {
       type: String,
     },
-    image: {
+    file: {
       type: String,
     },
   },

@@ -110,103 +110,110 @@ const Booking = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center p-6 bg-white">
+    <div className="min-h-screen flex justify-center items-center p-6 bg-gray-100">
       {/* Booking Card */}
-      <div className="relative bg-white p-10 rounded-3xl shadow-lg w-full max-w-2xl border border-gray-200">
+      <div className="relative bg-white p-8 md:p-12 rounded-3xl shadow-2xl w-full max-w-2xl border border-gray-200">
         <h2 className="text-3xl font-extrabold mb-8 text-center text-gray-900">
-          🚗 Booking Details
+        Secure Your Ride
         </h2>
 
         {/* ✅ Success Message */}
         {successMessage && (
-          <div className="mb-6 flex items-center justify-center gap-3 bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-xl shadow">
-            <CheckCircle className="text-green-600" />
-            <span className="font-semibold">{successMessage}</span>
+          <div className="mb-6 flex items-center justify-center gap-3 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl shadow">
+            <CheckCircle className="text-green-500" />
+            <span className="font-semibold text-sm md:text-base">{successMessage}</span>
           </div>
         )}
 
-        {bookingDetail && (
-          <div className="mb-6 space-y-3 text-gray-800">
-            <div className="flex items-center gap-3">
-              <Car className="text-[#D08700]" />
-              <p>
-                <strong>Car:</strong> {bookingDetail.name}
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              <Tag className="text-[#D08700]" />
-              <p>
-                <strong>Price/Day:</strong>{" "}
-                <span className="text-[#D08700] font-semibold">
-                  ${bookingDetail.pricePerDay}
-                </span>
-              </p>
-            </div>
+        {/* Car & User Details Section */}
+        <div className="mb-8 space-y-6">
+          <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Car Details</h3>
+            {bookingDetail && (
+              <div className="space-y-3 text-gray-700">
+                <div className="flex items-center gap-3">
+                  <Car className="text-yellow-500 w-5 h-5" />
+                  <p className="font-medium">
+                    <span className="text-gray-900 font-semibold">Car:</span> {bookingDetail.name}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Tag className="text-yellow-500 w-5 h-5" />
+                  <p className="font-medium">
+                    <span className="text-gray-900 font-semibold">Price/Day:</span>
+                    <span className="text-yellow-600 font-bold ml-1">${bookingDetail.pricePerDay}</span>
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
-        )}
 
-        {user && (
-          <div className="mb-6 space-y-3 text-gray-800">
-            <div className="flex items-center gap-3">
-              <User className="text-[#D08700]" />
-              <p>
-                <strong>User:</strong> {user.username}
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              <Mail className="text-[#D08700]" />
-              <p>
-                <strong>Email:</strong> {user.email}
-              </p>
-            </div>
+          <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">User Details</h3>
+            {user && (
+              <div className="space-y-3 text-gray-700">
+                <div className="flex items-center gap-3">
+                  <User className="text-yellow-500 w-5 h-5" />
+                  <p className="font-medium">
+                    <span className="text-gray-900 font-semibold">User:</span> {user.username}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Mail className="text-yellow-500 w-5 h-5" />
+                  <p className="font-medium">
+                    <span className="text-gray-900 font-semibold">Email:</span> {user.email}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
-        )}
+        </div>
 
-        {/* Dates */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        {/* Dates Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div>
-            <label className="block mb-2 font-medium text-gray-700 flex items-center">
-              <Calendar className="mr-2 text-[#D08700]" /> Start Date
+            <label className="block mb-2 font-semibold text-gray-700 flex items-center">
+              <Calendar className="mr-2 text-rose-500" /> Start Date
             </label>
             <input
               type="date"
               name="startDate"
               value={dates.startDate ? dates.startDate.slice(0, 10) : ""}
               onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D08700] transition"
+              className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400 transition"
               required
             />
           </div>
           <div>
-            <label className="block mb-2 font-medium text-gray-700 flex items-center">
-              <Calendar className="mr-2 text-[#D08700]" /> End Date
+            <label className="block mb-2 font-semibold text-gray-700 flex items-center">
+              <Calendar className="mr-2 text-rose-500" /> End Date
             </label>
             <input
               type="date"
               name="endDate"
               value={dates.endDate ? dates.endDate.slice(0, 10) : ""}
               onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D08700] transition"
+              className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400 transition"
               required
             />
           </div>
         </div>
 
-        {/* Total Price */}
-        <div className="mb-8 text-center bg-gray-100 p-6 rounded-2xl shadow-inner border border-gray-200">
-          <label className="block mb-2 font-semibold text-gray-700 text-lg flex justify-center items-center">
-            <DollarSign className="mr-2 text-[#D08700]" /> Total Price
+        {/* Total Price Section */}
+        <div className="mb-8 text-center bg-indigo-50 p-6 rounded-2xl shadow-inner border border-indigo-200">
+          <label className="block mb-2 font-bold text-gray-700 text-lg flex justify-center items-center">
+            <DollarSign className="mr-2 text-yellow-600" /> Total Price
           </label>
-          <p className="font-extrabold text-4xl text-[#D08700]">
-            {price !== null ? `$${price}` : "—"}
+          <p className="font-extrabold text-5xl text-yellow-700">
+            {price !== null ? `Rs.${price}` : "—"}
           </p>
         </div>
 
         {/* Confirm Button */}
         <button
-          className="w-full bg-[#D08700] text-white font-bold py-3 rounded-xl shadow-md hover:bg-[#b56d00] transition"
+          className="cursor-pointer  w-full bg-yellow-600 text-white font-bold py-3 rounded-xl shadow-lg hover:bg-yellow-700 transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
           onClick={handleBooking}
-          disabled={!!successMessage}
+          disabled={!dates.startDate || !dates.endDate || !price || !!successMessage}
         >
           Confirm Booking
         </button>

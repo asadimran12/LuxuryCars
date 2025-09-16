@@ -3,6 +3,7 @@ import { MapPin, Clock, Route } from "lucide-react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useAuth } from "../components/Context/Authcontent";
+import { useNavigate } from "react-router-dom";
 
 const Driver = () => {
   const today = new Date();
@@ -14,6 +15,7 @@ const Driver = () => {
   const [rides, setRides] = useState([]);
   const [error, setError] = useState(null);
   const { token } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchcompletedrides = async () => {
@@ -33,8 +35,7 @@ const Driver = () => {
         }
 
         const data = await response.json();
-        setRides(data);
-        console.log(data);
+        setRides(data.rides);
       } catch (error) {
         setError(error.message);
       }
@@ -55,10 +56,10 @@ const Driver = () => {
             },
           }
         );
-
+        
         const data = await response.json();
-        setDriver(data.user);
-        setStatus(data.user.availabilityStatus || "offline");
+        setDriver(data.driver);
+        setStatus(data.driver.availabilityStatus || "offline");
         setLoading(false);
       } catch (error) {
         console.error("Error fetching driver profile:", error);
@@ -132,7 +133,9 @@ const Driver = () => {
           </p>
         </div>
         <div className="flex gap-3">
-          <button className="px-5 py-2 rounded-2xl bg-blue-500 text-white hover:bg-blue-600 transition">
+          <button
+          onClick={()=>navigate("/driver/newride")}
+          className="px-5 py-2 rounded-2xl bg-blue-500 text-white hover:bg-blue-600 transition">
             New Rides
           </button>
           <button

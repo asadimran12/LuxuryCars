@@ -23,12 +23,14 @@ const DriverLogin = async (req, res) => {
     const token = jwt.sign(
       { id: existuser._id, role: "Driver" },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "7d",
-      }
+      { expiresIn: "7d" }
     );
 
-    res.status(200).json({ token, driver: existuser });
+    // remove password before sending back
+    const driverData = existuser.toObject();
+    delete driverData.password;
+
+    res.status(200).json({ token, driver: driverData });
   } catch (error) {
     console.error("Driver login error:", error);
     res.status(500).json({ message: "Server error" });
@@ -61,6 +63,7 @@ const DriverRegister = async (req, res) => {
     });
 
     await newDriver.save();
+
     res.status(201).json({ message: "Driver registered successfully" });
   } catch (error) {
     console.error("Driver register error:", error);
@@ -73,14 +76,11 @@ const DriverRegister = async (req, res) => {
 // ===============================
 const GetDriverProfile = async (req, res) => {
   try {
-    const driverId = req.params.id || req.user.id;
-    const driver = await Driver.findById(driverId).select("-password");
-
-    if (!driver) {
+    if (!req.driver) {
       return res.status(404).json({ message: "Driver not found" });
     }
 
-    res.status(200).json(driver);
+    res.status(200).json({ driver: req.driver });
   } catch (error) {
     console.error("Get driver profile error:", error);
     res.status(500).json({ message: "Server error" });
@@ -92,7 +92,8 @@ const GetDriverProfile = async (req, res) => {
 // ===============================
 const GetAllBooking = async (req, res) => {
   try {
-    const driverId = req.driver.id;
+    const driverId = req.driver._id;
+
     const bookings = await Driverbooking.find({ driver: driverId });
     res.status(200).json({ bookings });
   } catch (error) {
@@ -106,12 +107,17 @@ const GetAllBooking = async (req, res) => {
 // ===============================
 const UpdateDriverProfile = async (req, res) => {
   try {
-    const driverId = req.driver.id;
+    const driverId = req.driver._id;
     const { availabilityStatus } = req.body;
 
-    const driver = await Driver.findById(driverId);
+    const driver = await Driver.findById(driverId).select("-password");
     if (!driver) {
       return res.status(404).json({ message: "Driver not found" });
+    }
+
+    // update profile photo if new file uploaded
+    if (req.file) {
+      driver.profilePhoto = `/uploads/${req.file.filename}`;
     }
 
     // Handle availability status logic
@@ -142,17 +148,20 @@ const UpdateDriverProfile = async (req, res) => {
 const CompletedRides = async (req, res) => {
   try {
     const driverId = req.driver._id;
+
     const rides = await Driverbooking.find({
       status: "completed",
       driver: driverId,
     });
 
-    res.status(200).json(rides);
+    res.status(200).json({ rides });
   } catch (error) {
     console.error("Completed rides error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
 
 module.exports = {
   DriverLogin,

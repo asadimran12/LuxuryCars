@@ -11,7 +11,7 @@ const getMessages = async (req, res) => {
         .json({ message: "SenderId and ReceiverId required" });
     }
 
-    const messages = await Message.find({
+    const messages = await Message.find({ 
       $or: [
         { "senderId.id": senderId, "receiverId.id": receiverId },
         { "senderId.id": receiverId, "receiverId.id": senderId },
@@ -65,12 +65,30 @@ const GetChat = async (req, res) => {
         }
       }
     });
-
-    res.json(Object.values(partnersMap));
+ res.json(Object.values(partnersMap));
   } catch (error) {
     console.error("❌ Error fetching chats:", error.message);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-module.exports = { getMessages, GetChat };
+
+const deleteMessage = async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    if (!messageId) {
+      return res.status(400).json({ message: "MessageId required" });
+    }
+    const message = await Message.findById(messageId);
+    if (!message) {
+      return res.status(404).json({ message: "Message not found" });
+    }
+    await Message.findByIdAndDelete(messageId);
+    res.json({ message: "Message deleted successfully" });
+  } catch (error) {
+    console.error("❌ Error deleting message:", error.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = { getMessages, GetChat, deleteMessage };

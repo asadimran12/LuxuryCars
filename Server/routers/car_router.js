@@ -12,22 +12,22 @@ const {
   Addnewcar,
   DeleteCar
 } = require("../controllers/car_controller");
-const adminmiddleware = require("../middleware/admin_middleware");
+const showroomAuth = require("../middleware/Showroomowner_midlleware");
 const authenticate = require("../middleware/auth_middleware");
 const upload=require("../middleware/multer")
 
 // router.post("/add", adminmiddleware, addCar);
 router.get("/searchcar", searchCar);
 router.post("/booking/:id", authenticate, bookingCar);
-router.post("/addcar", adminmiddleware,upload.single("image"), Addnewcar);
-router.delete("/Deletecar/:id", adminmiddleware, DeleteCar);
-router.get("/carbookings", adminmiddleware, Getallbookings);
-router.get("/carbookings/:id", adminmiddleware, GetSpecificbooking);
-router.put("/carbookings/:id", adminmiddleware, ApprovedBooking);
-router.delete("/carbookings/:id", adminmiddleware, DeleteBooking);
+router.post("/addcar", showroomAuth, upload.single("image"), Addnewcar);
+router.delete("/Deletecar/:id", showroomAuth, DeleteCar);
+router.get("/carbookings", showroomAuth, Getallbookings);
+router.get("/carbookings/:id", showroomAuth, GetSpecificbooking);
+router.put("/carbookings/:id", showroomAuth, ApprovedBooking);
+router.delete("/carbookings/:id", showroomAuth, DeleteBooking);
 router.get("/", getAllCars);
 router.get("/:id", getCarById);
-// router.put("/:id", adminmiddleware, updateCar);
-// router.delete("/:id", adminmiddleware, deleteCar);
+// router.put("/:id", showroomAuth, updateCar);
+// router.delete("/:id", showroomAuth, deleteCar);
 
 module.exports = router;

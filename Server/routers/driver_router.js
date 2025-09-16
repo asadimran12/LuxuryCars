@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const {
-   DriverLogin,
+  DriverLogin,
   DriverRegister,
   GetDriverProfile,
   GetAllBooking,
@@ -26,17 +26,7 @@ router.post(
   DriverRegister
 );
 
-router.get("/driverprofile", Drivermiddleware, async (req, res) => {
-  try {
-    const user = req.driver;
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-    return res.status(200).json({ user });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+router.get("/driverprofile", Drivermiddleware, GetDriverProfile);
 
 router.put(
   "/updateprofile",

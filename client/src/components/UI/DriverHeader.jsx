@@ -46,7 +46,7 @@ const DriverHeader = () => {
 
           {/* Chat button with icon */}
           <button
-            onClick={() => navigate("/driver/chat")}
+            onClick={() => navigate("/driver/Allchats")}
             className="flex items-center space-x-2 hover:text-yellow-400 transition"
           >
             <MessageCircle className="w-5 h-5" />

@@ -43,12 +43,18 @@ const carSchema = new mongoose.Schema({
     default: "",
   },
   features: {
-    type: [String], 
+    type: [String],
     default: [],
   },
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+
+  listedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Showroomowner",
+    required: true,
   },
 });
 

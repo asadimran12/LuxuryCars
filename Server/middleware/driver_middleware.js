@@ -7,7 +7,7 @@ const authenticate = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const user = await Driver.findById(decoded._id).select("-password");
+    const user = await Driver.findById(decoded.id).select("-password");
     if (!user) {
      return  res.status(401).json({ error: "No user Found" });
     }

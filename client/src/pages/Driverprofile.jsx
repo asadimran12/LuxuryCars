@@ -3,7 +3,7 @@ import { useAuth } from "../components/Context/Authcontent";
 
 const DriverProfile = () => {
   const [driver, setDriver] = useState({});
-  const {token}=useAuth();
+  const { token } = useAuth();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchDriver = async () => {
@@ -19,7 +19,7 @@ const DriverProfile = () => {
         );
 
         const data = await response.json();
-        setDriver(data.user);
+        setDriver(data.driver);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching driver profile:", error);

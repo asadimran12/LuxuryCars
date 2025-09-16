@@ -11,7 +11,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const [authRes, driverRes] = await Promise.all([
+      const [authRes, driverRes, showroomownerRes] = await Promise.all([
         fetch("http://localhost:3000/api/auth/login", {
           method: "POST",
           headers: {
@@ -26,25 +26,47 @@ const Login = () => {
           },
           body: JSON.stringify({ email, password }),
         }),
+        fetch("http://localhost:3000/api/showroom/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }),
       ]);
 
-      const [authData, driverData] = await Promise.all([
+      const [authData, driverData, showroomownerData] = await Promise.all([
         authRes.json(),
         driverRes.json(),
+        showroomownerRes.json(),
       ]);
+      console.log("Showroom Owner Data:", showroomownerData);
 
       if (authRes.ok) {
-        login(authData.token, authData.user.role,authData.user.id);
+        login(authData.token, authData.user.role, authData.user.id);
 
         if (authData.user.role === "admin") {
-          navigate("/admin");
+          navigate("/superadmin");
         } else {
           navigate("/");
         }
       }
 
+      console.log("Showroom Owner Response:", showroomownerRes);
+
+      if (showroomownerRes.ok) {
+        login(
+          showroomownerData.token,
+          showroomownerData.role,
+          showroomownerData._id
+        );
+        localStorage.setItem("showroomownerName", showroomownerData.showroom);
+        navigate("/admin");
+        return;
+      }
+
       if (driverRes.ok) {
-        login(driverData.token, "driver",driverData.driver._id);
+        login(driverData.token, "driver", driverData.driver._id);
         navigate("/driver");
         return;
       }

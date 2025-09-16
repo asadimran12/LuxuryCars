@@ -19,7 +19,7 @@ const getCarById = async (req, res) => {
   try {
     const car = await Car.findById(req.params.id);
     if (!car) {
-    return  res.status(404).json("No Cars Availabel");
+      return res.status(404).json("No Cars Availabel");
     }
     return res.status(200).json(car);
   } catch (error) {
@@ -240,6 +240,7 @@ const Addnewcar = async (req, res) => {
       description,
       features,
     } = req.body;
+    const listedBy = req.showroom._id;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
     const existingCar = await Car.findOne({ brand, model, year });
     if (existingCar) {
@@ -258,7 +259,9 @@ const Addnewcar = async (req, res) => {
       description,
       features,
       image, // optional, can stay empty
+      listedBy,
     });
+
     await car.save();
 
     res.status(201).json(car);
@@ -267,7 +270,7 @@ const Addnewcar = async (req, res) => {
   }
 };
 
-const DeleteCar=async(req,res)=>{
+const DeleteCar = async (req, res) => {
   try {
     const deleteCar = await Car.findByIdAndDelete(req.params.id);
     if (!deleteCar) {
@@ -275,9 +278,9 @@ const DeleteCar=async(req,res)=>{
     }
     return res.status(200).json("Car Deleted Successfully");
   } catch (error) {
-    res.status(400).json({ error: error.message }); 
+    res.status(400).json({ error: error.message });
   }
-}
+};
 
 module.exports = {
   getAllCars,
@@ -289,5 +292,5 @@ module.exports = {
   ApprovedBooking,
   DeleteBooking,
   Addnewcar,
-  DeleteCar
+  DeleteCar,
 };
