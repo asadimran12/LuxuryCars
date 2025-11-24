@@ -5,6 +5,7 @@ const path = require("path");
 const http = require("http"); // required for socket.io
 const { Server } = require("socket.io");
 require("dotenv").config();
+const router = express.Router();
 
 const router = require("./routers/auth_router");
 const carrouter = require("./routers/car_router");

@@ -53,8 +53,14 @@ const Register = async (req, res) => {
   try {
     const { username, email, password, phone, dob, address } = req.body;
 
+    // --------------- CHANGE IS HERE ----------------
+    // OLD: const avatar = req.file ? `/uploads/${req.file.filename}` : null;
+    
+    // NEW: Use req.file.path which is the full Cloudinary URL (https://res.cloudinary...)
     const avatar = req.file ? req.file.path : null;
+    // -----------------------------------------------
 
+    // ✅ Check if user already exists
     const existUser = await User.findOne({ email });
     if (existUser) {
       return res
@@ -117,7 +123,7 @@ const Register = async (req, res) => {
         phone: newUser.phone,
         dob: newUser.dob,
         address: newUser.address,
-        avatar: newUser.avatar, 
+        avatar: newUser.avatar, // This will now send back the full Cloudinary URL
         role: newUser.role,
         createdAt: newUser.createdAt,
       },
