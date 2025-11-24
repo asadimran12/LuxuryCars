@@ -124,7 +124,7 @@ const Home = () => {
 
                 <div className="bg-gray-100 w-full h-32 rounded-lg flex items-center justify-center">
                   <img
-                    src={`http://localhost:3000${cars.image}`}
+                    src={`${API_URL}/${cars.image}`}
                     alt={cars.model}
                     className="h-full object-contain"
                   />

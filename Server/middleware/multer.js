@@ -1,21 +1,24 @@
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+const { v2: cloudinary } = require("cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-// Ensure uploads folder exists
-const uploadFolder = "uploads";
-if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder);
+// 1. Configure Cloudinary with your keys
+// Ideally, put these in your .env file for security!
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'dq4yrxcmn', 
+  api_key: process.env.CLOUDINARY_API_KEY || '112427935511474',
+  api_secret: process.env.CLOUDINARY_API_SECRET 
+});
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadFolder);
-  },
-  filename: (req, file, cb) => {
-    const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}${path.extname(file.originalname)}`;
-    cb(null, uniqueName);
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "luxury-cars", 
+    allowed_formats: ["jpg", "png", "jpeg", "webp"], 
   },
 });
 
+// 3. Initialize Multer with Cloudinary storage
 const upload = multer({ storage });
 
-module.exports = upload; 
+module.exports = upload;

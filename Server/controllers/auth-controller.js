@@ -53,9 +53,8 @@ const Register = async (req, res) => {
   try {
     const { username, email, password, phone, dob, address } = req.body;
 
-    const avatar = req.file ? `/uploads/${req.file.filename}` : null;
+    const avatar = req.file ? req.file.path : null;
 
-    // ✅ Check if user already exists
     const existUser = await User.findOne({ email });
     if (existUser) {
       return res
@@ -71,11 +70,11 @@ const Register = async (req, res) => {
       phone,
       dob,
       address,
-      avatar,
+      avatar, // Saves the Cloudinary URL directly
     });
 
     await newUser.save();
-    const token = newUser.generatetoken(); // make sure this function exists in your model
+    const token = newUser.generatetoken(); 
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -100,7 +99,7 @@ const Register = async (req, res) => {
           <p>
             Explore our collection and enjoy your journey in style ✨
           </p>
-         
+          
           <hr/>
           <p style="font-size:12px; color:#666;">
             © ${new Date().getFullYear()} Luxury Cars. All Rights Reserved.
@@ -118,7 +117,7 @@ const Register = async (req, res) => {
         phone: newUser.phone,
         dob: newUser.dob,
         address: newUser.address,
-        avatar: newUser.avatar,
+        avatar: newUser.avatar, 
         role: newUser.role,
         createdAt: newUser.createdAt,
       },

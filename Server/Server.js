@@ -24,7 +24,7 @@ const server = http.createServer(app); // create HTTP server
 // ✅ Setup Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", // your frontend URL
+    origin: process.env.Frontend, // your frontend URL
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -65,9 +65,13 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "No file uploaded" });
   }
-  const filePath = `${process.env.Frontend}/uploads/${req.file.filename}`;
 
-  res.status(200).json({ message: "File uploaded successfully", filePath });
+  const filePath = req.file.path;
+
+  res.status(200).json({
+    message: "File uploaded successfully",
+    url: filePath,
+  });
 });
 
 io.on("connection", (socket) => {
@@ -111,7 +115,7 @@ io.on("connection", (socket) => {
   });
   socket.on("sendLocation", (data) => {
     console.log("Location:", data);
-    io.emit("receiveLocation", data); 
+    io.emit("receiveLocation", data);
   });
 });
 
@@ -120,6 +124,4 @@ io.on("connection", (socket) => {
 //   console.log(`🚀 Server is running at http://localhost:3000`);
 // });
 
-module.exports=router
-
-
+module.exports = router;
