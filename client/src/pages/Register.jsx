@@ -16,6 +16,8 @@ const Register = () => {
 
   const [avatarFile, setAvatarFile] = useState(null);
 
+    const API_URL = import.meta.env?.VITE_API_URL || "http://localhost:3000";
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "avatar") {
@@ -36,7 +38,7 @@ const Register = () => {
         dataToSend.append("avatar", avatarFile);
       }
 
-      const response = await fetch("http://localhost:3000/api/auth/register", {
+      const response = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         body: dataToSend,
       });

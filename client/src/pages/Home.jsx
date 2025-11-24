@@ -7,39 +7,40 @@ import Searchingcar from "./Searchingcar";
 const Home = () => {
   const [car, setcar] = useState([]);
   const [visibleCount, setVisibleCount] = useState(3);
-
-  const fetchcar = async () => {
-    try {
-      const responce = await fetch("http://localhost:3000/api/car/", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await responce.json();
-      setcar(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleResize = () => {
-    if (window.innerWidth < 640) {
-      setVisibleCount(1); // small screens
-    } else if (window.innerWidth < 1024) {
-      setVisibleCount(2); // medium screens
-    } else {
-      setVisibleCount(3); // large screens
-    }
-  };
+  const API_URL = import.meta.env?.VITE_API_URL || "http://localhost:3000";
 
   useEffect(() => {
+    const fetchcar = async () => {
+      try {
+        const responce = await fetch(`${API_URL}/api/car/`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await responce.json();
+        setcar(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setVisibleCount(1); // small screens
+      } else if (window.innerWidth < 1024) {
+        setVisibleCount(2); // medium screens
+      } else {
+        setVisibleCount(3); // large screens
+      }
+    };
+
     fetchcar();
     handleResize();
     window.addEventListener("resize", handleResize);
 
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [API_URL]);
 
   const brands = [
     { name: "Audi", logo: "/Audi.png" },

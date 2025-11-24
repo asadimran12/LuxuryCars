@@ -9,24 +9,26 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const API_URL = import.meta.env?.VITE_API_URL || "http://localhost:3000";
+
   const handleLogin = async () => {
     try {
       const [authRes, driverRes, showroomownerRes] = await Promise.all([
-        fetch("http://localhost:3000/api/auth/login", {
+        fetch(`${API_URL}/api/auth/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ email, password }),
         }),
-        fetch("http://localhost:3000/api/driver/login", {
+        fetch(`${API_URL}/api/driver/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ email, password }),
         }),
-        fetch("http://localhost:3000/api/showroom/login", {
+        fetch(`${API_URL}/api/showroom/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

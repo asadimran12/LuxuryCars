@@ -33,7 +33,7 @@ const io = new Server(server, {
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.Frontend,
     credentials: true,
   })
 );
@@ -65,7 +65,7 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "No file uploaded" });
   }
-  const filePath = `http://localhost:3000/uploads/${req.file.filename}`;
+  const filePath = `${process.env.Frontend}/uploads/${req.file.filename}`;
 
   res.status(200).json({ message: "File uploaded successfully", filePath });
 });
@@ -111,11 +111,15 @@ io.on("connection", (socket) => {
   });
   socket.on("sendLocation", (data) => {
     console.log("Location:", data);
-    io.emit("receiveLocation", data); // broadcast to all
+    io.emit("receiveLocation", data); 
   });
 });
 
 // Start Server
-server.listen(3000, () => {
-  console.log(`🚀 Server is running at http://localhost:3000`);
-});
+// server.listen(3000, () => {
+//   console.log(`🚀 Server is running at http://localhost:3000`);
+// });
+
+module.exports=router
+
+
