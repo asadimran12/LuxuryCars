@@ -4,7 +4,7 @@ import { io } from "socket.io-client";
 import EmojiPicker from "emoji-picker-react";
 
 // ✅ Connect to backend Socket.IO
-const socket = io("http://localhost:3000", {
+const socket = io(`${import.meta.env?.VITE_API_URL}`, {
   withCredentials: true,
 });
 
@@ -41,8 +41,8 @@ const Chat = ({ driverId, userId, partner, status, onBack }) => {
 
         const endpoint =
           role === "driver"
-            ? `http://localhost:3000/api/messages/driver/${senderId}/${receiverId}`
-            : `http://localhost:3000/api/messages/${senderId}/${receiverId}`;
+            ? `${import.meta.env?.VITE_API_URL}/api/messages/driver/${senderId}/${receiverId}`
+            : `${import.meta.env?.VITE_API_URL}/api/messages/${senderId}/${receiverId}`;
 
         const response = await fetch(endpoint, {
           headers: {
@@ -134,7 +134,7 @@ const Chat = ({ driverId, userId, partner, status, onBack }) => {
     const formData = new FormData();
     formData.append("file", file);
     try {
-      const response = await fetch("http://localhost:3000/api/upload", {
+      const response = await fetch(`${import.meta.env?.VITE_API_URL}/api/upload`, {
         method: "POST",
         body: formData,
       });
@@ -165,7 +165,7 @@ const Chat = ({ driverId, userId, partner, status, onBack }) => {
 
   const renderMessageContent = (message) => {
     if (message.file) {
-      const fileUrl = `http://localhost:3000${message.file}`;
+      const fileUrl = `${import.meta.env?.VITE_API_URL}${message.file}`;
       const extension = message.file.split(".").pop().toLowerCase();
 
       if (["jpg", "jpeg", "png", "gif", "webp"].includes(extension)) {
@@ -201,8 +201,8 @@ const Chat = ({ driverId, userId, partner, status, onBack }) => {
     try {
       const endpoint =
         role === "driver"
-          ? `http://localhost:3000/api/messages/driver/${messageId}`
-          : `http://localhost:3000/api/messages/${messageId}`;
+          ? `${import.meta.env?.VITE_API_URL}/api/messages/driver/${messageId}`
+          : `${import.meta.env?.VITE_API_URL}/api/messages/${messageId}`;
 
       const response = await fetch(endpoint, {
         method: "DELETE",
