@@ -7,6 +7,10 @@ const driverBookingSchema = new mongoose.Schema(
       ref: "Driver",
       required: true,
     },
+    bookedby: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
     passengerName: {
       type: String,
       required: true,

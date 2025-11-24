@@ -25,33 +25,35 @@ const DriverHeader = () => {
 
         {/* Navigation */}
         <nav className="flex space-x-6 items-center">
-          <button
-            onClick={() => navigate("/driver")}
-            className="hover:text-yellow-400 transition"
-          >
-            Dashboard
-          </button>
-          <button
-            onClick={() => navigate("/driver/boking")}
-            className="hover:text-yellow-400 transition"
-          >
-            Bookings
-          </button>
-          <button
-            onClick={() => navigate("/driver/profile")}
-            className="hover:text-yellow-400 transition"
-          >
-            Profile
-          </button>
+          <div className="hidden lg:flex space-x-6 items-center">
+            <button
+              onClick={() => navigate("/driver")}
+              className="hover:text-yellow-400 transition"
+            >
+              Dashboard
+            </button>
+            <button
+              onClick={() => navigate("/driver/boking")}
+              className="hover:text-yellow-400 transition"
+            >
+              Bookings
+            </button>
+            <button
+              onClick={() => navigate("/driver/profile")}
+              className="hover:text-yellow-400 transition"
+            >
+              Profile
+            </button>
 
-          {/* Chat button with icon */}
-          <button
-            onClick={() => navigate("/driver/Allchats")}
-            className="flex items-center space-x-2 hover:text-yellow-400 transition"
-          >
-            <MessageCircle className="w-5 h-5" />
-            <span>Chat</span>
-          </button>
+            {/* Chat button with icon */}
+            <button
+              onClick={() => navigate("/driver/Allchats")}
+              className="flex items-center space-x-2 hover:text-yellow-400 transition"
+            >
+              <MessageCircle className="w-5 h-5" />
+              <span>Chat</span>
+            </button>
+          </div>
 
           {/* Logout button */}
           {token && (

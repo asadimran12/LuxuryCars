@@ -15,7 +15,6 @@ const AdminProfile = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
-      console.log(data);
       setProfile(data);
       setFormData(data);
     } catch (error) {
@@ -58,26 +57,33 @@ const AdminProfile = () => {
   if (!profile) return <p className="text-center mt-10">Loading profile...</p>;
 
   return (
-    <div className="flex">
-      <Slidebar />
-      <div className="flex-1 flex justify-center items-start p-8 bg-gray-100 min-h-screen">
-        <div className="w-full max-w-2xl bg-white shadow-lg rounded-xl p-6">
+    <div className="flex min-h-screen bg-gray-100">
+      {/* Sidebar */}
+      <div className="hidden md:block">
+        <Slidebar />
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 md:ml-52 ml-0 transition-all duration-300 p-4 sm:p-6 lg:p-8">
+        <div className="w-full sm:max-w-xl lg:max-w-2xl mx-auto bg-white shadow-lg rounded-xl p-6">
           {/* Profile Picture */}
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center text-center">
             <img
               src={`http://localhost:3000${profile.showroompic}`}
               alt="Profile"
-              className="w-28 h-28 rounded-full shadow-md object-cover border-4 border-yellow-400"
+              className="w-24 h-24 sm:w-28 sm:h-28 rounded-full shadow-md object-cover border-4 border-yellow-400"
             />
-            <h2 className="mt-4 text-2xl font-bold text-gray-800">
+            <h2 className="mt-4 text-xl sm:text-2xl font-bold text-gray-800">
               {profile.ownerName}
             </h2>
-            <p className="text-gray-500">{profile.email}</p>
+            <p className="text-gray-500 text-sm sm:text-base">
+              {profile.email}
+            </p>
           </div>
 
           {/* Profile Info */}
           {!editMode ? (
-            <div className="mt-6 space-y-4 text-gray-700">
+            <div className="mt-6 space-y-3 text-gray-700 text-sm sm:text-base">
               <div>
                 <span className="font-semibold">Showroom:</span>{" "}
                 {profile.showroomName}
@@ -104,7 +110,7 @@ const AdminProfile = () => {
               </div>
 
               {/* Social Links */}
-              <div className="flex gap-4 mt-4">
+              <div className="flex flex-wrap gap-3 mt-4 justify-center">
                 {profile.socialLinks?.facebook && (
                   <a
                     href={profile.socialLinks.facebook}
@@ -139,8 +145,7 @@ const AdminProfile = () => {
             </div>
           ) : (
             // Editable Form
-            <div className="mt-6 space-y-4">
-              {/* Owner Name */}
+            <div className="mt-6 space-y-3">
               <input
                 type="text"
                 value={formData.ownerName || ""}
@@ -226,7 +231,7 @@ const AdminProfile = () => {
           )}
 
           {/* Buttons */}
-          <div className="flex justify-end mt-6 gap-3">
+          <div className="flex flex-col sm:flex-row justify-end mt-6 gap-3">
             {editMode ? (
               <>
                 <button

@@ -3,7 +3,6 @@ import Slidebar from "../components/UI/Slidebar";
 import { useAuth } from "../components/Context/Authcontent";
 import AdminCarDetails from "./Admincardetails";
 import { useNavigate } from "react-router-dom";
-import Adminaddnewcar from "./Adminaddnewcar";
 
 const Admincars = () => {
   const { token, logout } = useAuth();
@@ -53,7 +52,7 @@ const Admincars = () => {
       setSuccess("Car deleted successfully ✅");
       fetchCars();
     } catch (error) {
-      console.log("Error fetching cars:", error);
+      console.log("Error deleting car:", error);
     }
   };
 
@@ -67,52 +66,60 @@ const Admincars = () => {
       <Slidebar />
 
       {/* Main Content */}
-      <div className="flex-1 ml-16 md:ml-52 transition-all duration-300 p-6">
+      <div className="flex-1 ml-0 md:ml-64 transition-all duration-300 p-4 sm:p-6">
         <div className="max-w-6xl mx-auto bg-white shadow-xl rounded-xl overflow-hidden border border-gray-200">
-          <div className="flex justify-between items-center px-6 py-4 border-b bg-gradient-to-r from-yelow-50 to-yellow-100">
+          {/* Header Section */}
+          <div className="flex flex-col sm:flex-row justify-between sm:items-center px-4 sm:px-6 py-4 border-b bg-gradient-to-r from-yellow-50 to-yellow-100 gap-3">
             <div>
-              <h2 className="text-3xl font-bold text-yellow-800">
+              <h2 className="text-2xl sm:text-3xl font-bold text-yellow-800">
                 🚗 Car Management
               </h2>
               <p className="text-sm text-gray-600 mt-1">
-                {" "}
                 View, manage, and inspect all registered cars.
               </p>
             </div>
-            {success && <p className="text-green-600 mb-4">{success}</p>}
 
-            <button
-              onClick={() => navigate("/admin/addcars")}
-              className="bg-yellow-800 hover:bg-yellow-900 text-white px-4 py-2 rounded-md text-sm font-semibold shadow"
-            >
-              Add new Car
-            </button>
+            {/* Success Message */}
+            {success && (
+              <p className="text-green-600 text-sm sm:text-base">{success}</p>
+            )}
 
-            <button
-              onClick={handleLogout}
-              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-semibold shadow"
-            >
-              Logout
-            </button>
+            {/* Buttons */}
+            <div className="flex flex-col sm:flex-row gap-2">
+              <button
+                onClick={() => navigate("/admin/addcars")}
+                className="bg-yellow-800 hover:bg-yellow-900 text-white px-4 py-2 rounded-md text-sm font-semibold shadow"
+              >
+                Add New Car
+              </button>
+
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-semibold shadow"
+              >
+                Logout
+              </button>
+            </div>
           </div>
 
+          {/* Table Section */}
           <div className="overflow-x-auto">
-            <table className="min-w-full table-auto">
-              <thead className="bg-gradient-to-r from-yelow-50 to-yellow-100">
+            <table className="min-w-full table-auto text-sm sm:text-base">
+              <thead className="bg-gradient-to-r from-yellow-50 to-yellow-100">
                 <tr>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-yellow-800 uppercase border-b">
+                  <th className="px-4 sm:px-6 py-3 text-left font-bold text-yellow-800 uppercase border-b">
                     Name
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-yellow-800 uppercase border-b">
+                  <th className="px-4 sm:px-6 py-3 text-left font-bold text-yellow-800 uppercase border-b">
                     Model
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-yellow-800 uppercase border-b">
+                  <th className="px-4 sm:px-6 py-3 text-left font-bold text-yellow-800 uppercase border-b">
                     Year
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-yellow-800 uppercase border-b">
+                  <th className="px-4 sm:px-6 py-3 text-left font-bold text-yellow-800 uppercase border-b">
                     Price/Day
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-yellow-800 uppercase border-b">
+                  <th className="px-4 sm:px-6 py-3 text-left font-bold text-yellow-800 uppercase border-b">
                     Action
                   </th>
                 </tr>
@@ -133,30 +140,30 @@ const Admincars = () => {
                       key={car._id}
                       className="hover:bg-yellow-50 transition duration-200"
                     >
-                      <td className="px-6 py-4 border-b text-gray-700">
+                      <td className="px-4 sm:px-6 py-4 border-b text-gray-700">
                         {car.name}
                       </td>
-                      <td className="px-6 py-4 border-b text-gray-600">
+                      <td className="px-4 sm:px-6 py-4 border-b text-gray-600">
                         {car.model}
                       </td>
-                      <td className="px-6 py-4 border-b text-gray-600">
+                      <td className="px-4 sm:px-6 py-4 border-b text-gray-600">
                         {car.year}
                       </td>
-                      <td className="px-6 py-4 border-b text-gray-600">
+                      <td className="px-4 sm:px-6 py-4 border-b text-gray-600">
                         Rs.{car.pricePerDay}
                       </td>
-                      <td className="px-6 py-4 border-b">
-                        <div className="flex gap-4">
+                      <td className="px-4 sm:px-6 py-4 border-b">
+                        <div className="flex flex-col sm:flex-row gap-2">
                           <button
                             onClick={() => setSelectedCarId(car._id)}
-                            className="bg-yellow-600  text-white px-4 py-1.5 rounded-md hover:bg-yellow-700 transition text-sm"
+                            className="bg-yellow-600 text-white px-3 sm:px-4 py-1.5 rounded-md hover:bg-yellow-700 transition text-sm"
                           >
                             View Details
                           </button>
 
                           <button
                             onClick={() => handledelete(car._id)}
-                            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-semibold shadow"
+                            className="bg-red-600 hover:bg-red-700 text-white px-3 sm:px-4 py-1.5 rounded-md text-sm font-semibold shadow"
                           >
                             Delete
                           </button>

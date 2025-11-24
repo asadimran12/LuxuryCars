@@ -8,7 +8,7 @@ const socket = io("http://localhost:3000", {
   withCredentials: true,
 });
 
-const Chat = ({ driverId, userId, partner, status }) => {
+const Chat = ({ driverId, userId, partner, status, onBack }) => {
   const { token, role, userId: currentUserId } = useAuth();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -74,7 +74,6 @@ const Chat = ({ driverId, userId, partner, status }) => {
       setMessages((prev) => [...prev, message]);
     });
 
-    // ✅ Listen for typing
     socket.on("typing", ({ senderId }) => {
       if (senderId !== currentUserId) setTyping(true);
     });
@@ -179,72 +178,14 @@ const Chat = ({ driverId, userId, partner, status }) => {
         );
       }
 
-      const fileIcons = {
-        pdf: {
-          color: "text-red-600",
-          icon: "https://cdn-icons-png.flaticon.com/512/337/337946.png",
-          label: "Open PDF",
-        },
-        doc: {
-          color: "text-blue-600",
-          icon: "https://cdn-icons-png.flaticon.com/512/281/281760.png",
-          label: "Open Document",
-        },
-        docx: {
-          color: "text-blue-600",
-          icon: "https://cdn-icons-png.flaticon.com/512/281/281760.png",
-          label: "Open Document",
-        },
-        xls: {
-          color: "text-green-600",
-          icon: "https://cdn-icons-png.flaticon.com/512/732/732220.png",
-          label: "Open Spreadsheet",
-        },
-        xlsx: {
-          color: "text-green-600",
-          icon: "https://cdn-icons-png.flaticon.com/512/732/732220.png",
-          label: "Open Spreadsheet",
-        },
-        ppt: {
-          color: "text-orange-600",
-          icon: "https://cdn-icons-png.flaticon.com/512/732/732224.png",
-          label: "Open Presentation",
-        },
-        pptx: {
-          color: "text-orange-600",
-          icon: "https://cdn-icons-png.flaticon.com/512/732/732224.png",
-          label: "Open Presentation",
-        },
-      };
-
-      if (fileIcons[extension]) {
-        const { color, icon, label } = fileIcons[extension];
-        return (
-          <a
-            href={fileUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`flex items-center space-x-2 ${color} hover:underline`}
-          >
-            <img src={icon} alt={extension} className="w-6 h-6" />
-            <span>{label}</span>
-          </a>
-        );
-      }
-
       return (
         <a
           href={fileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center space-x-2 text-gray-600 hover:underline"
+          className="flex items-center space-x-2 text-blue-600 hover:underline"
         >
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/109/109612.png"
-            alt="File"
-            className="w-6 h-6"
-          />
-          <span>Download File</span>
+          📎 <span>Download File</span>
         </a>
       );
     }
@@ -283,15 +224,24 @@ const Chat = ({ driverId, userId, partner, status }) => {
     <div className="flex flex-col h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-yellow-600 text-white p-4 shadow-md flex items-center space-x-4">
+        {/* ✅ Back Arrow (only on mobile) */}
+        <button
+          onClick={onBack}
+          className="md:hidden mr-2 text-white hover:text-gray-200"
+        >
+          ←
+        </button>
+
         <img
-          src={partner.image}
-          alt={partner.fullName}
+          src={partner?.image || "/default-avatar.png"}
+          alt={partner?.fullName || "Unknown"}
           className="w-10 h-10 rounded-full object-cover"
         />
+
         <div className="flex flex-col">
-          <h2 className="text-lg font-semibold">{partner.fullName}</h2>
+          <h2 className="text-lg font-semibold">{partner?.fullName}</h2>
           {typing ? (
-            <span className="text-sm text-green-500">typing...</span>
+            <span className="text-sm text-green-200">typing...</span>
           ) : (
             <span
               className={`px-2 py-1 text-xs font-medium rounded-full w-fit ${
@@ -332,21 +282,12 @@ const Chat = ({ driverId, userId, partner, status }) => {
 
                   {message.senderId?.id === currentUserId && (
                     <div className="absolute top-1 right-1">
-                      <svg
+                      <button
                         onClick={() => toggleMenu(message._id)}
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 text-white/80 hover:text-white cursor-pointer"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
+                        className="text-white/80 hover:text-white text-xs"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M6 9l6 6 6-6"
-                        />
-                      </svg>
+                        ⋮
+                      </button>
                       {menuOpen === message._id && (
                         <div className="absolute right-0 mt-1 w-24 bg-white text-gray-800 rounded-md shadow-lg z-50">
                           <button
@@ -402,20 +343,7 @@ const Chat = ({ driverId, userId, partner, status }) => {
               className="hidden"
               onChange={handleFileInputClick}
             />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-gray-400 hover:text-gray-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
+            +
           </label>
         </div>
 

@@ -47,10 +47,10 @@ const Adminbookingdetails = ({ id, onClose }) => {
         {
           method: "PUT",
           headers: {
-            "Content-Type": "application/json", 
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ status: "approved" }), 
+          body: JSON.stringify({ status: "approved" }),
         }
       );
 
@@ -98,7 +98,14 @@ const Adminbookingdetails = ({ id, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500/50">
-      <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative">
+      <div
+        className="
+          bg-white w-full h-full sm:h-auto sm:max-w-lg sm:rounded-lg 
+          shadow-lg p-6 relative overflow-y-auto
+          sm:mx-4
+        "
+      >
+        {/* Close Button */}
         <button
           onClick={onClose}
           className="absolute top-2 right-3 text-gray-600 hover:text-black text-2xl"
@@ -111,7 +118,7 @@ const Adminbookingdetails = ({ id, onClose }) => {
         </h1>
 
         {/* Booking Details */}
-        <div className="space-y-3 text-gray-700">
+        <div className="space-y-3 text-gray-700 text-sm sm:text-base">
           <p>
             <strong>Car Name:</strong> {car.name}
           </p>
@@ -138,16 +145,18 @@ const Adminbookingdetails = ({ id, onClose }) => {
             {new Date(booking.createdAt).toLocaleDateString()}
           </p>
         </div>
-        <div className="flex gap-3">
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-3 mt-6">
           <button
             onClick={handleupdate}
-            className="bg-blue-500 p-2 rounded-2xl px-3 text-white mt-3 "
+            className="flex-1 bg-blue-500 px-4 py-2 rounded-md text-white font-medium hover:bg-blue-600 transition"
           >
-            Approved
+            Approve
           </button>
           <button
             onClick={handledelete}
-            className="bg-red-500 p-2 rounded-2xl px-3 text-white mt-3"
+            className="flex-1 bg-red-500 px-4 py-2 rounded-md text-white font-medium hover:bg-red-600 transition"
           >
             Delete
           </button>

@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../components/Context/Authcontent";
+import MapComponent from "../components/MapComponent";
+import { useNavigate } from "react-router-dom";
+import { MessageCircle } from "lucide-react";
 
 const Driverbookings = () => {
-  const {token}=useAuth();
+  const { token } = useAuth();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchBookings = async () => {
       try {
@@ -106,10 +110,17 @@ const Driverbookings = () => {
               <p className="text-sm text-gray-600">
                 📞 Phone: {booking.passengerPhone}
               </p>
+              {/* Show Map */}
+              <div className="mt-4">
+                <MapComponent
+                  pickupCoords={booking.pickupCoords} // e.g. [31.582045, 74.329376]
+                  dropoffCoords={booking.dropoffCoords} // e.g. [31.5204, 74.3587]
+                />
+              </div>
 
               <div className="flex justify-between mt-4 text-sm font-medium">
-                <p>🚗 Distance: {booking.distance}</p>
-                <p>⏱ Duration: {booking.duration}</p>
+                <p>🚗 Distance: {booking.distance} KM</p>
+                <p>⏱ Duration: {booking.duration} hours</p>
                 <p>💰 Fare: Rs {booking.fare}</p>
               </div>
 
@@ -132,6 +143,20 @@ const Driverbookings = () => {
                   disabled={booking.status !== "pending"}
                 >
                   Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    if (booking?.bookedby) {
+                      navigate(`/home/chat/${booking.bookedby}`, {});
+                      console.log("Navigating to chat with:", booking.bookedby);
+                    } else {
+                      console.log("User not loaded yet");
+                    }
+                  }}
+                  className="flex items-center gap-2 bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow-sm transition duration-200 font-medium"
+                >
+                  <MessageCircle className="w-5 h-5 text-gray-600" />
+                  Chat
                 </button>
               </div>
             </div>

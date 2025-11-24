@@ -268,6 +268,7 @@ const ResetPassword = async (req, res) => {
 const Bookdriver = async (req, res) => {
   try {
     const driver = req.params.id;
+    const bookedby = req.user._id;
 
     const {
       passengerName,
@@ -309,6 +310,7 @@ const Bookdriver = async (req, res) => {
     // Create new booking with default status and paymentStatus
     const newBooking = new Driverbook_model({
       driver,
+      bookedby,
       passengerName,
       passengerPhone,
       pickupLocation,
@@ -375,7 +377,7 @@ const GetSpecificDriver = async (req, res) => {
   }
 };
 
-const GetallDrivers = async (req,res) => {
+const GetallDrivers = async (req, res) => {
   try {
     const drivers = await Driver.find().select("-password");
     if (!drivers) {
@@ -431,6 +433,44 @@ const GetAdminprofile = async (req, res) => {
   }
 };
 
+const GetAllbookings = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const bookings = await Driverbook_model.find({ bookedby: userId })
+      .populate("driver")
+      .populate("bookedby", "name email");
+
+    if (!bookings || bookings.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No bookings found for this user" });
+    }
+
+    return res.status(200).json({ bookings });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+const UserdeleteSpecificbooking = async (req, res) => {
+  try {
+    const bookingid = req.params.id;
+
+    const booking = await Driverbook_model.findById(bookingid);
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    await Driverbook_model.findByIdAndDelete(bookingid);
+
+    return res.status(200).json({
+      message: "Booking deleted successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
   Login,
@@ -448,4 +488,6 @@ module.exports = {
   Getallshowrooms,
   GetSpecificShowroom,
   GetAdminprofile,
+  GetAllbookings,
+  UserdeleteSpecificbooking,
 };

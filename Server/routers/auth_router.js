@@ -16,6 +16,8 @@ const {
   Getallshowrooms,
   GetSpecificShowroom,
   GetAdminprofile,
+  GetAllbookings,
+  UserdeleteSpecificbooking,
 } = require("../controllers/auth-controller");
 const upload = require("../middleware/multer");
 const adminmiddleware = require("../middleware/admin_middleware");
@@ -30,13 +32,15 @@ const {
 
 router.post("/login", loginValidation, Login);
 router.post("/register", upload.single("avatar"), registerValidation, Register);
-router.get("/getshowroom/:id",authmiddleware,GetSpecificShowroom)
+router.get("/getshowroom/:id", authmiddleware, GetSpecificShowroom);
 router.get("/users/:id", showroomauth, Getspecificuser);
 router.get("/driver/users/:id", driverauthmiddleware, Getspecificuser);
 router.delete("/users/:id", adminmiddleware, Deletespecificuser);
 router.post("/driverbook/:id", authmiddleware, Bookdriver);
 router.post("/driverlocation", authmiddleware, GetSpecificlocationdriver);
 router.get("/driverprofile/:id", authmiddleware, GetSpecificDriver);
+router.get("/usergetallbookings", authmiddleware, GetAllbookings);
+router.delete("/userdelbooking/:id", authmiddleware, UserdeleteSpecificbooking);
 
 //superadmin get drivers
 router.get("/admin/drivers", adminmiddleware, GetallDrivers);

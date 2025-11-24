@@ -95,126 +95,139 @@ const Adminaddnewcar = ({ onClose }) => {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100">
-      <Slidebar />
-      <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md">
-        <h2 className="text-2xl font-bold text-yellow-800 mb-6">Add New Car</h2>
+    <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100">
+      {/* Sidebar (hidden on small screens) */}
+      <div className="hidden lg:block">
+        <Slidebar />
+      </div>
 
-        {error && <p className="text-red-600 mb-4">{error}</p>}
-        {success && <p className="text-green-600 mb-4">{success}</p>}
+      {/* Form Section */}
+      <div className="flex-1 flex justify-center items-center p-4">
+        <div className="bg-white shadow-lg rounded-xl p-6 sm:p-8 w-full max-w-3xl">
+          <h2 className="text-xl sm:text-2xl font-bold text-yellow-800 mb-6 text-center sm:text-left">
+            Add New Car
+          </h2>
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
-          <input
-            type="text"
-            name="name"
-            placeholder="Car Name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="w-full border border-gray-300 rounded-md px-4 py-2"
-          />
-          <input
-            type="text"
-            name="brand"
-            placeholder="Brand"
-            value={formData.brand}
-            onChange={handleChange}
-            required
-            className="w-full border border-gray-300 rounded-md px-4 py-2"
-          />
-          <input
-            type="text"
-            name="model"
-            placeholder="Model"
-            value={formData.model}
-            onChange={handleChange}
-            required
-            className="w-full border border-gray-300 rounded-md px-4 py-2"
-          />
-          <input
-            type="number"
-            name="year"
-            placeholder="Year"
-            value={formData.year}
-            onChange={handleChange}
-            required
-            className="w-full border border-gray-300 rounded-md px-4 py-2"
-          />
-          <input
-            type="number"
-            name="pricePerDay"
-            placeholder="Price per Day (Rs.)"
-            value={formData.pricePerDay}
-            onChange={handleChange}
-            required
-            className="w-full border border-gray-300 rounded-md px-4 py-2"
-          />
+          {error && <p className="text-red-600 mb-4">{error}</p>}
+          {success && <p className="text-green-600 mb-4">{success}</p>}
 
-          <select
-            name="fuelType"
-            value={formData.fuelType}
-            onChange={handleChange}
-            className="border border-gray-300 rounded-md px-4 py-2"
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4"
           >
-            <option value="Petrol">Petrol</option>
-            <option value="Diesel">Diesel</option>
-            <option value="Hybrid">Hybrid</option>
-            <option value="Electric">Electric</option>
-          </select>
-          <input
-            type="number"
-            name="seats"
-            placeholder="Seats"
-            value={formData.seats}
-            onChange={handleChange}
-            required
-            className="border border-gray-300 rounded-md px-4 py-2"
-          />
+            <input
+              type="text"
+              name="name"
+              placeholder="Car Name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded-md px-4 py-2"
+            />
+            <input
+              type="text"
+              name="brand"
+              placeholder="Brand"
+              value={formData.brand}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded-md px-4 py-2"
+            />
+            <input
+              type="text"
+              name="model"
+              placeholder="Model"
+              value={formData.model}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded-md px-4 py-2"
+            />
+            <input
+              type="number"
+              name="year"
+              placeholder="Year"
+              value={formData.year}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded-md px-4 py-2"
+            />
+            <input
+              type="number"
+              name="pricePerDay"
+              placeholder="Price per Day (Rs.)"
+              value={formData.pricePerDay}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded-md px-4 py-2"
+            />
 
-          <input
-            type="file"
-            name="image"
-            placeholder="Image Filename (e.g. car.jpg)"
-            accept="image/*"
-            onChange={(e) =>
-              setFormData({ ...formData, image: e.target.files[0] })
-            }
-            className="col-span-2 border border-gray-300 rounded-md px-4 py-2"
-          />
+            <select
+              name="fuelType"
+              value={formData.fuelType}
+              onChange={handleChange}
+              className="border border-gray-300 rounded-md px-4 py-2"
+            >
+              <option value="Petrol">Petrol</option>
+              <option value="Diesel">Diesel</option>
+              <option value="Hybrid">Hybrid</option>
+              <option value="Electric">Electric</option>
+            </select>
 
-          <textarea
-            name="description"
-            placeholder="Description"
-            value={formData.description}
-            onChange={handleChange}
-            className="col-span-2 border border-gray-300 rounded-md px-4 py-2"
-          />
+            <input
+              type="number"
+              name="seats"
+              placeholder="Seats"
+              value={formData.seats}
+              onChange={handleChange}
+              required
+              className="border border-gray-300 rounded-md px-4 py-2"
+            />
 
-          <input
-            type="text"
-            name="features"
-            placeholder="Features (comma separated)"
-            value={formData.features}
-            onChange={handleChange}
-            className="col-span-2 border border-gray-300 rounded-md px-4 py-2"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-yellow-800 hover:bg-yellow-900 text-white px-4 py-2 rounded-md font-semibold shadow"
-          >
-            {loading ? "Adding..." : "Add Car"}
-          </button>
-        </form>
+            <input
+              type="file"
+              name="image"
+              accept="image/*"
+              onChange={(e) =>
+                setFormData({ ...formData, image: e.target.files[0] })
+              }
+              className="col-span-1 sm:col-span-2 border border-gray-300 rounded-md px-4 py-2"
+            />
 
-        {onClose && (
-          <button
-            onClick={onClose}
-            className="mt-4 w-full bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md"
-          >
-            Cancel
-          </button>
-        )}
+            <textarea
+              name="description"
+              placeholder="Description"
+              value={formData.description}
+              onChange={handleChange}
+              className="col-span-1 sm:col-span-2 border border-gray-300 rounded-md px-4 py-2"
+            />
+
+            <input
+              type="text"
+              name="features"
+              placeholder="Features (comma separated)"
+              value={formData.features}
+              onChange={handleChange}
+              className="col-span-1 sm:col-span-2 border border-gray-300 rounded-md px-4 py-2"
+            />
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="col-span-1 sm:col-span-2 w-full bg-yellow-800 hover:bg-yellow-900 text-white px-4 py-2 rounded-md font-semibold shadow"
+            >
+              {loading ? "Adding..." : "Add Car"}
+            </button>
+          </form>
+
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="mt-4 w-full bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md"
+            >
+              Cancel
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

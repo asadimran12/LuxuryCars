@@ -4,7 +4,7 @@ import { FaTwitter, FaFacebookF, FaInstagram } from 'react-icons/fa';
 const Footer = () => {
   return (
     <footer className="bg-[#0b132b] text-white py-10 px-6">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-8 text-sm">
+      <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8 text-sm">
         {/* Reservation */}
         <div>
           <h3 className="font-semibold mb-3">Reservation</h3>

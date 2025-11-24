@@ -13,6 +13,11 @@ const driverSchema = new mongoose.Schema(
     dateOfBirth: { type: Date, required: true },
     address: { type: String, required: true },
     currentlocation: { type: String, required: true },
+    booked: {
+      type: String,
+      enum: ["booked", "available"],
+      default: "available",
+    },
 
     profilePhoto: { type: String, default: "" },
 

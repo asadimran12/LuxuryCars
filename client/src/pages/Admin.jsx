@@ -16,16 +16,19 @@ const Admin = () => {
     localStorage.getItem("showroomownerName") || "Admin";
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex flex-col md:flex-row min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <Slidebar />
+      <div className="w-full md:w-auto">
+        <Slidebar />
+      </div>
 
       {/* Main Content */}
-      <main className="flex-1 ml-16 md:ml-52 p-8 transition-all duration-300">
-        <div className="bg-white p-6 rounded-xl shadow-md mb-6 flex justify-between items-center">
+      <main className="flex-1 md:ml-16 lg:ml-52 p-4 sm:p-6 lg:p-8 transition-all duration-300">
+        {/* Header Section */}
+        <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-blue-800">
-              Welcome,{showroomownerName}{" "}
+            <h1 className="text-2xl sm:text-3xl font-bold text-blue-800">
+              Welcome, {showroomownerName}
             </h1>
             <p className="text-sm text-gray-600 mt-1">
               Manage your dashboard from the options on the left.
@@ -33,14 +36,14 @@ const Admin = () => {
           </div>
           <button
             onClick={handleLogout}
-            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-semibold shadow"
+            className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-semibold shadow"
           >
             Logout
           </button>
         </div>
 
-        {/* Placeholder or main dashboard content */}
-        <div className="text-gray-700 text-lg">
+        {/* Placeholder Content */}
+        <div className="text-gray-700 text-base sm:text-lg">
           You are now logged into the showroom panel.
         </div>
       </main>

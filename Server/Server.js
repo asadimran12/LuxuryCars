@@ -75,7 +75,7 @@ io.on("connection", (socket) => {
 
   socket.on("joinroom", (userId) => {
     socket.join(userId);
-    console.log(`✅ User ${socket.id} joined room: ${userId}`);
+    console.log(`✅ Users ${socket.id} joined room: ${userId}`);
   });
 
   socket.on("sendMessage", async (data) => {
@@ -108,6 +108,10 @@ io.on("connection", (socket) => {
     } catch (error) {
       console.error("❌ Error saving message:", error.message);
     }
+  });
+  socket.on("sendLocation", (data) => {
+    console.log("Location:", data);
+    io.emit("receiveLocation", data); // broadcast to all
   });
 });
 

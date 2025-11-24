@@ -23,7 +23,6 @@ const AdminReview = () => {
         }
       );
       const data = await response.json();
-      console.log(data);
       setReviews(data || []);
     } catch (error) {
       console.log("Error fetching reviews:", error);
@@ -40,49 +39,53 @@ const AdminReview = () => {
   }, [token]);
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex flex-col md:flex-row min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <Slidebar />
+      <div className="w-full md:w-auto">
+        <Slidebar />
+      </div>
 
       {/* Main Content */}
-      <div className="flex-1 ml-16 md:ml-52 transition-all duration-300 p-6">
+      <div className="flex-1 md:ml-16 lg:ml-52 transition-all duration-300 p-4 sm:p-6">
         <div className="max-w-6xl mx-auto bg-white shadow-xl rounded-xl overflow-hidden border border-gray-200">
-          <div className="flex justify-between items-center px-6 py-4 border-b bg-gradient-to-r from-yellow-50 to-yellow-100">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 sm:px-6 py-4 border-b bg-gradient-to-r from-yellow-50 to-yellow-100 gap-3">
             <div>
-              <h2 className="text-3xl font-bold text-yellow-800">
+              <h2 className="text-2xl sm:text-3xl font-bold text-yellow-800">
                 ⭐ Review Management
               </h2>
               <p className="text-sm text-gray-600 mt-1">
                 View, manage, and inspect all customer reviews.
               </p>
             </div>
-            {success && <p className="text-green-600 mb-4">{success}</p>}
+            {success && <p className="text-green-600 mb-2">{success}</p>}
 
             <button
               onClick={handleLogout}
-              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-semibold shadow"
+              className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-semibold shadow"
             >
               Logout
             </button>
           </div>
 
+          {/* Table */}
           <div className="overflow-x-auto">
-            <table className="min-w-full table-auto">
+            <table className="min-w-full table-auto text-sm sm:text-base">
               <thead className="bg-gradient-to-r from-yellow-50 to-yellow-100">
                 <tr>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-yellow-800 uppercase border-b">
+                  <th className="px-3 sm:px-6 py-3 text-left font-bold text-yellow-800 uppercase border-b">
                     Reviewer
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-yellow-800 uppercase border-b">
+                  <th className="px-3 sm:px-6 py-3 text-left font-bold text-yellow-800 uppercase border-b">
                     Car
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-yellow-800 uppercase border-b">
+                  <th className="px-3 sm:px-6 py-3 text-left font-bold text-yellow-800 uppercase border-b">
                     Rating
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-yellow-800 uppercase border-b">
+                  <th className="px-3 sm:px-6 py-3 text-left font-bold text-yellow-800 uppercase border-b">
                     Comment
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-yellow-800 uppercase border-b">
+                  <th className="px-3 sm:px-6 py-3 text-left font-bold text-yellow-800 uppercase border-b">
                     Actions
                   </th>
                 </tr>
@@ -103,20 +106,20 @@ const AdminReview = () => {
                       key={review._id}
                       className="hover:bg-yellow-50 transition duration-200"
                     >
-                      <td className="px-6 py-4 border-b text-gray-700">
+                      <td className="px-3 sm:px-6 py-4 border-b text-gray-700">
                         {review.reviewerid.username || "Unknown"}
                       </td>
-                      <td className="px-6 py-4 border-b text-gray-600">
+                      <td className="px-3 sm:px-6 py-4 border-b text-gray-600">
                         {review.reviewcar.name || "N/A"}
                       </td>
-                      <td className="px-6 py-4 border-b text-gray-600">
+                      <td className="px-3 sm:px-6 py-4 border-b text-gray-600">
                         {review.rating} ⭐
                       </td>
-                      <td className="px-6 py-4 border-b text-gray-600">
+                      <td className="px-3 sm:px-6 py-4 border-b text-gray-600">
                         {review.review}
                       </td>
-                      <td className="px-6 py-4 border-b text-gray-600">
-                        <button className="bg-yellow-600 text-white px-4 py-1.5 rounded-md hover:bg-yellow-700 transition text-sm">
+                      <td className="px-3 sm:px-6 py-4 border-b text-gray-600">
+                        <button className="w-full sm:w-auto bg-yellow-600 text-white px-3 sm:px-4 py-1.5 rounded-md hover:bg-yellow-700 transition text-sm">
                           Reply
                         </button>
                       </td>

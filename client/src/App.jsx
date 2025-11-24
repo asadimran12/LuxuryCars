@@ -46,6 +46,8 @@ import Superadmingetusers from "./pages/Superadmingetusers";
 import Superadmingetshowrooms from "./pages/Superadmingetshowrooms";
 import Superadmingetdrivers from "./pages/Superadmingetdrivers";
 import Superadminprofile from "./pages/Superadminprofile";
+import DriverBookingform from "./pages/DriverBookingform";
+import Usersbookings from "./pages/Usersbookings";
 
 // ✅ Redirect Component Based on Role
 const RedirectBasedOnRole = () => {
@@ -93,9 +95,11 @@ const getUserRoutes = () => [
       { path: "/home/contactus", element: <Contact /> },
       { path: "/home/profile", element: <Profile /> },
       { path: "/home/booking/:id", element: <Booking /> },
+      { path: "/home/driverbooking/:id", element: <DriverBookingform /> },
       { path: "/home/drivers", element: <BookDriver /> },
       { path: "/home/chat/:driverId", element: <Chat /> },
       { path: "/home/Allchats", element: <AllChats /> },
+      { path: "/home/UsersAllbookings", element: <Usersbookings /> },
     ],
   },
 ];

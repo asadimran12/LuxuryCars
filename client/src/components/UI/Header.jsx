@@ -1,7 +1,12 @@
 import React from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { FiMessageSquare } from "react-icons/fi";
-import { FiLogIn, FiLogOut } from "react-icons/fi";
+import {
+  FiMessageSquare,
+  FiLogIn,
+  FiLogOut,
+  FiMenu,
+  FiX,
+} from "react-icons/fi";
 import { FaUser, FaCar } from "react-icons/fa"; // 🚗 add car icon
 import { useAuth } from "../Context/Authcontent";
 
@@ -15,6 +20,7 @@ const Header = () => {
     { path: "/home/services", label: "Services" },
     { path: "/home/blogsposts", label: "Blog" },
     { path: "/home/contactus", label: "Contact Us" },
+      { path: "/home/UsersAllbookings", label: "Bookings" },
   ];
 
   return (
@@ -22,14 +28,14 @@ const Header = () => {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo */}
         <h1
-          className="text-2xl font-bold text-gray-800 cursor-pointer"
+          className=" font-bold text-gray-800 cursor-pointer"
           onClick={() => navigate("/")}
         >
-          LuxuryCars
+          <span className=" text-1xl mr-3 sm:text-2xl"> LuxuryCars</span>
         </h1>
 
         {/* Navigation Links */}
-        <nav className="flex gap-6">
+        <nav className="hidden lg:flex gap-6">
           {links.map(({ path, label }) => (
             <Link
               key={path}
@@ -47,24 +53,22 @@ const Header = () => {
 
         {/* Right Side */}
         <div className="flex gap-4 items-center">
-          {/* Book a Driver */}
           {token && (
             <NavLink
               to="/home/drivers"
               className="flex items-center gap-2 bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg shadow-md transition duration-200 font-medium"
             >
               <FaCar size={18} />
-              Book a Driver
+              <span className=" hidden sm:block"> Book a Driver </span>
             </NavLink>
           )}
 
-          {/* Show "Join As Driver" only if NOT logged in */}
           {!token && (
             <NavLink
               to="/driver/signup"
               className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg shadow-md transition duration-200"
             >
-              Join As Driver
+              <span className=" hidden sm:block"> Join As Driver</span>
             </NavLink>
           )}
 
@@ -73,7 +77,7 @@ const Header = () => {
             className="flex items-center gap-2 bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow-sm transition duration-200 font-medium"
           >
             <FiMessageSquare size={18} />
-            Chat
+            <span className=" hidden sm:block">Chat</span>
           </NavLink>
 
           {/* Profile */}
@@ -89,11 +93,14 @@ const Header = () => {
           {/* Auth */}
           {token ? (
             <button
-              onClick={logout}
+              onClick={() => {
+                logout();
+                navigate("/login");
+              }}
               className="flex items-center gap-2 text-gray-700 hover:text-red-600 font-medium transition duration-200"
             >
               <FiLogOut size={20} />
-              Logout
+              <span className=" hidden sm:block">Logout</span>
             </button>
           ) : (
             <button
@@ -101,7 +108,7 @@ const Header = () => {
               className="flex items-center gap-2 text-gray-700 hover:text-yellow-600 font-medium transition duration-200"
             >
               <FiLogIn size={20} />
-              Login
+              <span className=" hidden sm:block">Login</span>
             </button>
           )}
         </div>

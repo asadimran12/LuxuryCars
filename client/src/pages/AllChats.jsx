@@ -31,7 +31,6 @@ const AllChats = () => {
             const partnerId = chat.partner.id;
             const partnerType = chat.partner.type;
 
-            // Decide endpoint based on type
             const detailsEndpoint =
               partnerType === "Driver"
                 ? `http://localhost:3000/api/auth/driverprofile/${partnerId}`
@@ -41,10 +40,11 @@ const AllChats = () => {
               headers: { Authorization: `Bearer ${token}` },
             });
             const details = await detailsRes.json();
+
             if (partnerType === "Driver")
-              setStatus(details.driver.availabilityStatus || null);
+              setStatus(details.driver?.availabilityStatus || null);
             else if (partnerType === "User")
-              setStatus(details.finduser.availabilityStatus || null);
+              setStatus(details.finduser?.availabilityStatus || null);
 
             return {
               ...chat,
@@ -63,6 +63,7 @@ const AllChats = () => {
             };
           })
         );
+
         setChats(detailedChats);
       } catch (error) {
         console.log("❌ Error fetching chats:", error);
@@ -73,85 +74,60 @@ const AllChats = () => {
   }, [role, token]);
 
   return (
-    <div style={{ display: "flex", height: "100vh", border: "1px solid #ddd" }}>
+    <div className="flex h-screen border border-gray-300">
       {/* Sidebar */}
       <div
-        style={{
-          width: "280px",
-          borderRight: "1px solid #ccc",
-          overflowY: "auto",
-          backgroundColor: "#f9f9f9",
-        }}
+        className={`bg-gray-50 border-r border-gray-300 overflow-y-auto 
+        w-full md:w-[280px] 
+        ${selectedChat ? "hidden md:block" : "block"}`}
       >
-        <h3
-          style={{ padding: "15px", margin: 0, borderBottom: "1px solid #ccc" }}
-        >
-          Chats
-        </h3>
+        <h3 className="p-4 border-b border-gray-300 font-semibold">Chats</h3>
         {chats.length > 0 ? (
           chats.map((chat) => (
             <div
               key={chat.partner.id}
               onClick={() => setSelectedChat(chat.partner)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-                padding: "15px",
-                borderBottom: "1px solid #eee",
-                cursor: "pointer",
-                backgroundColor:
+              className={`flex items-center gap-3 p-4 border-b border-gray-200 cursor-pointer 
+                ${
                   selectedChat?.id === chat.partner.id
-                    ? "#e6f0ff"
-                    : "transparent",
-              }}
+                    ? "bg-blue-100"
+                    : "hover:bg-gray-100"
+                }`}
             >
               {/* Partner image */}
               <img
                 src={chat.partner.image}
                 alt="avatar"
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                }}
+                className="w-10 h-10 rounded-full object-cover"
               />
               <div>
-                <div style={{ fontWeight: "bold" }}>
-                  {chat.partner.fullName}
-                </div>
-                <div style={{ fontSize: "13px", color: "#666" }}>
+                <div className="font-bold">{chat.partner.fullName}</div>
+                <div className="text-sm text-gray-500">
                   {chat.lastMessage?.text?.slice(0, 25) || "No messages yet..."}
                 </div>
               </div>
             </div>
           ))
         ) : (
-          <p style={{ padding: "15px" }}>No chats found</p>
+          <p className="p-4 text-gray-500">No chats found</p>
         )}
       </div>
 
       {/* Chat Window */}
-      <div style={{ flex: 1 }}>
+      <div
+        className={`flex-1 
+        ${selectedChat ? "block" : "hidden md:block"}`}
+      >
         {selectedChat ? (
           <Chat
             partner={selectedChat}
             status={status}
             driverId={selectedChat.type === "Driver" ? selectedChat.id : null}
             userId={selectedChat.type === "User" ? selectedChat.id : null}
+            onBack={() => setSelectedChat(null)} // ✅ pass back handler
           />
         ) : (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "100%",
-              fontSize: "18px",
-              color: "#666",
-            }}
-          >
+          <div className="flex items-center justify-center h-full text-lg text-gray-500">
             Select a chat to start messaging 💬
           </div>
         )}
