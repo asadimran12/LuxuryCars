@@ -105,6 +105,5 @@ io.on("connection", (socket) => {
   });
 });
 
-// ✅ Remove module.exports for main server file
-// Uncomment for local testing
-// server.listen(3000, () => console.log("🚀 Server running on port 3000"));
+
+module.exports=router
