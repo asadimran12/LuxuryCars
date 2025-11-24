@@ -41,8 +41,12 @@ const Chat = ({ driverId, userId, partner, status, onBack }) => {
 
         const endpoint =
           role === "driver"
-            ? `${import.meta.env?.VITE_API_URL}/api/messages/driver/${senderId}/${receiverId}`
-            : `${import.meta.env?.VITE_API_URL}/api/messages/${senderId}/${receiverId}`;
+            ? `${
+                import.meta.env?.VITE_API_URL
+              }/api/messages/driver/${senderId}/${receiverId}`
+            : `${
+                import.meta.env?.VITE_API_URL
+              }/api/messages/${senderId}/${receiverId}`;
 
         const response = await fetch(endpoint, {
           headers: {
@@ -134,10 +138,13 @@ const Chat = ({ driverId, userId, partner, status, onBack }) => {
     const formData = new FormData();
     formData.append("file", file);
     try {
-      const response = await fetch(`${import.meta.env?.VITE_API_URL}/api/upload`, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        `${import.meta.env?.VITE_API_URL}/api/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
       if (!response.ok) throw new Error("File upload failed");
       const data = await response.json();
       const filePath = data.path;
