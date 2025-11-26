@@ -1,41 +1,18 @@
 const multer = require("multer");
-const cloudinary = require("cloudinary").v2;
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
-require("dotenv").config();
+const path = require("path");
 
-// ------------------------------------
-// 1. Configure Cloudinary
-// ------------------------------------
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-// ------------------------------------
-// 2. Configure Storage
-// ------------------------------------
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: async (req, file) => {
-    return {
-      folder: "luxury-cars",        // Folder name in Cloudinary
-      resource_type: "auto",        // IMPORTANT → upload images, videos, pdfs
-      format: "jpg",                // Auto convert to JPG (optional)
-      allowed_formats: ["jpg", "png", "jpeg", "webp", "mp4", "pdf"],
-      transformation: [
-        { width: 1080, crop: "limit" } // Resize only large images
-      ]
-    };
+// Storage engine
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // folder where images are stored
+  },
+  filename: (req, file, cb) => {
+    const uniqueName =
+      Date.now() + "-" + Math.round(Math.random() * 1e9) + path.extname(file.originalname);
+    cb(null, uniqueName);
   },
 });
 
-// ------------------------------------
-// 3. Initialize Multer
-// ------------------------------------
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 20 * 1024 * 1024 }, // 20 MB limit
-});
+const upload = multer({ storage });
 
 module.exports = upload;

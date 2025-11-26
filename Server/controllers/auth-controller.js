@@ -53,22 +53,14 @@ const Register = async (req, res) => {
   try {
     const { username, email, password, phone, dob, address } = req.body;
 
-    // --------------- CHANGE IS HERE ----------------
-    // OLD: const avatar = req.file ? `/uploads/${req.file.filename}` : null;
-    
-    // NEW: Use req.file.path which is the full Cloudinary URL (https://res.cloudinary...)
-    const avatar = req.file ? req.file.path : null;
-    // -----------------------------------------------
+    // If image uploaded — multer gives full filename
+    const avatar = req.file ? `/uploads/${req.file.filename}` : null;
 
-    // ✅ Check if user already exists
     const existUser = await User.findOne({ email });
     if (existUser) {
-      return res
-        .status(409)
-        .json({ message: "User already exists with this email." });
+      return res.status(409).json({ message: "User already exists" });
     }
 
-    // ✅ Create new user
     const newUser = new User({
       username,
       email,
@@ -76,62 +68,20 @@ const Register = async (req, res) => {
       phone,
       dob,
       address,
-      avatar, // Saves the Cloudinary URL directly
+      avatar,
     });
 
     await newUser.save();
-    const token = newUser.generatetoken(); 
-
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    // ✅ Send Welcome Email
-    await transporter.sendMail({
-      from: `"Luxury Cars" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: " Welcome to Luxury Cars!",
-      html: `
-        <div style="font-family:Arial, sans-serif; padding:20px; background:#f8f9fa;">
-          <h2 style="color:#333;">Welcome ${username}!</h2>
-          <p>
-            Thank you for joining <b>Luxury Cars</b>.  
-            We’re excited to provide you with the <b>best luxury cars</b> and premium service.
-          </p>
-          <p>
-            Explore our collection and enjoy your journey in style ✨
-          </p>
-          
-          <hr/>
-          <p style="font-size:12px; color:#666;">
-            © ${new Date().getFullYear()} Luxury Cars. All Rights Reserved.
-          </p>
-        </div>
-      `,
-    });
+    const token = newUser.generatetoken();
 
     res.status(201).json({
       message: "User registered successfully",
-      user: {
-        _id: newUser._id,
-        username: newUser.username,
-        email: newUser.email,
-        phone: newUser.phone,
-        dob: newUser.dob,
-        address: newUser.address,
-        avatar: newUser.avatar, // This will now send back the full Cloudinary URL
-        role: newUser.role,
-        createdAt: newUser.createdAt,
-      },
+      user: newUser,
       token,
     });
   } catch (error) {
     console.error("Register Error:", error);
-    return res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
