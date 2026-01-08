@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../utils/apiConfig";
 
 const VerifyOTP = () => {
   const [otp, setOtp] = useState("");
@@ -15,7 +16,7 @@ const VerifyOTP = () => {
     setSuccess("");
 
     try {
-      const response = await fetch("http://localhost:3000/api/auth/sendOTP", {
+      const response = await fetch(`${API_URL}/api/auth/sendOTP`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,7 +44,7 @@ const VerifyOTP = () => {
     setSuccess("");
 
     try {
-      const response = await fetch("http://localhost:3000/api/auth/verifyotp", {
+      const response = await fetch(`${API_URL}/api/auth/verifyotp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

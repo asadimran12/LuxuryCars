@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../components/Context/Authcontent";
+import { API_URL } from "../utils/apiConfig";
 
 const DriverProfile = () => {
   const [driver, setDriver] = useState({});
@@ -9,7 +10,7 @@ const DriverProfile = () => {
     const fetchDriver = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/driver/driverprofile",
+          `${API_URL}/api/driver/driverprofile`,
           {
             method: "GET",
             headers: {
@@ -38,7 +39,7 @@ const DriverProfile = () => {
     <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-2xl">
       <div className="flex items-center gap-4">
         <img
-          src={`http://localhost:3000${driver?.profilePhoto}`}
+          src={`${API_URL}${driver?.profilePhoto}`}
           alt={driver.fullName}
           className="w-24 h-24 rounded-full border"
         />

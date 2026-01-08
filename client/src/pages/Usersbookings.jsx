@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../components/Context/Authcontent";
+import { API_URL } from "../utils/apiConfig";
 
 const Usersbookings = () => {
   const { token } = useAuth();
@@ -12,11 +13,11 @@ const Usersbookings = () => {
     const fetchBookings = async () => {
       try {
         const [response, profileres] = await Promise.all([
-          fetch("http://localhost:3000/api/auth/usergetallbookings", {
+          fetch(`${API_URL}/api/auth/usergetallbookings`, {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch("http://localhost:3000/api/user/profile", {
+          fetch(`${API_URL}/api/user/profile`, {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
           }),
@@ -48,7 +49,7 @@ const Usersbookings = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/auth/userdelbooking/${id}`,
+        `${API_URL}/api/auth/userdelbooking/${id}`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
@@ -114,15 +115,14 @@ const Usersbookings = () => {
                 <p className="text-sm sm:text-base">
                   <strong>Status:</strong>{" "}
                   <span
-                    className={`px-2 py-1 rounded text-white text-xs sm:text-sm ${
-                      booking.status === "pending"
+                    className={`px-2 py-1 rounded text-white text-xs sm:text-sm ${booking.status === "pending"
                         ? "bg-yellow-500"
                         : booking.status === "completed"
-                        ? "bg-green-600"
-                        : booking.status === "cancelled"
-                        ? "bg-red-600"
-                        : "bg-blue-600"
-                    }`}
+                          ? "bg-green-600"
+                          : booking.status === "cancelled"
+                            ? "bg-red-600"
+                            : "bg-blue-600"
+                      }`}
                   >
                     {booking.status}
                   </span>

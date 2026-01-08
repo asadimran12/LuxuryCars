@@ -3,6 +3,7 @@ import Slidebar from "../components/UI/Slidebar";
 import { useAuth } from "../components/Context/Authcontent";
 import AdminCarDetails from "./Admincardetails";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../utils/apiConfig";
 
 const Admincars = () => {
   const { token, logout } = useAuth();
@@ -13,7 +14,7 @@ const Admincars = () => {
 
   const fetchCars = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/car", {
+      const response = await fetch(`${API_URL}/api/car`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -39,7 +40,7 @@ const Admincars = () => {
     if (!confirmDelete) return;
     try {
       const response = await fetch(
-        `http://localhost:3000/api/car/Deletecar/${id}`,
+        `${API_URL}/api/car/Deletecar/${id}`,
         {
           method: "DELETE",
           headers: {

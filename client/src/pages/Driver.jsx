@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { MapPin, Clock, Route } from "lucide-react";
 import { useAuth } from "../components/Context/Authcontent";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../utils/apiConfig";
 
 const Driver = () => {
   const today = new Date();
@@ -19,7 +20,7 @@ const Driver = () => {
     const fetchcompletedrides = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/driver/getcompletedrides",
+          `${API_URL}/api/driver/getcompletedrides`,
           {
             method: "GET",
             headers: {
@@ -42,7 +43,7 @@ const Driver = () => {
     const fetchDriver = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/driver/driverprofile",
+          `${API_URL}/api/driver/driverprofile`,
           {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
@@ -72,7 +73,7 @@ const Driver = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/api/driver/updateprofile",
+        `${API_URL}/api/driver/updateprofile`,
         {
           method: "PUT",
           headers: { Authorization: `Bearer ${token}` },
@@ -125,11 +126,10 @@ const Driver = () => {
           </button>
           <button
             onClick={handleonline}
-            className={`flex-1 sm:flex-none px-5 py-2 rounded-2xl text-white transition ${
-              status === "online"
-                ? "bg-red-500 hover:bg-red-600"
-                : "bg-green-500 hover:bg-green-600"
-            }`}
+            className={`flex-1 sm:flex-none px-5 py-2 rounded-2xl text-white transition ${status === "online"
+              ? "bg-red-500 hover:bg-red-600"
+              : "bg-green-500 hover:bg-green-600"
+              }`}
           >
             {status === "online" ? "Go Offline" : "Go Online"}
           </button>

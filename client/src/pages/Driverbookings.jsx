@@ -3,6 +3,7 @@ import { useAuth } from "../components/Context/Authcontent";
 import MapComponent from "../components/MapComponent";
 import { useNavigate } from "react-router-dom";
 import { MessageCircle } from "lucide-react";
+import { API_URL } from "../utils/apiConfig";
 
 const Driverbookings = () => {
   const { token } = useAuth();
@@ -13,7 +14,7 @@ const Driverbookings = () => {
     const fetchBookings = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/driver/getallbookings",
+          `${API_URL}/api/driver/getallbookings`,
           {
             method: "GET",
             headers: {
@@ -37,7 +38,7 @@ const Driverbookings = () => {
   const updateBookingStatus = async (id, newStatus) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/driver/updatebooking/${id}`,
+        `${API_URL}/api/driver/updatebooking/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -85,15 +86,14 @@ const Driverbookings = () => {
                   Passenger: {booking.passengerName}
                 </h2>
                 <span
-                  className={`px-3 py-1 text-sm rounded-full ${
-                    booking.status === "completed"
+                  className={`px-3 py-1 text-sm rounded-full ${booking.status === "completed"
                       ? "bg-green-100 text-green-700"
                       : booking.status === "ongoing"
-                      ? "bg-blue-100 text-blue-700"
-                      : booking.status === "cancelled"
-                      ? "bg-red-100 text-red-700"
-                      : "bg-yellow-100 text-yellow-700"
-                  }`}
+                        ? "bg-blue-100 text-blue-700"
+                        : booking.status === "cancelled"
+                          ? "bg-red-100 text-red-700"
+                          : "bg-yellow-100 text-yellow-700"
+                    }`}
                 >
                   {booking.status}
                 </span>

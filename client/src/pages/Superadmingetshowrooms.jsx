@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../components/Context/Authcontent";
 import Superadminslider from "../components/UI/Superadminslider";
+import { API_URL } from "../utils/apiConfig";
 
 import { Bar } from "react-chartjs-2";
 import {
@@ -32,7 +33,7 @@ const Superadmingetshowrooms = () => {
     const fetchShowrooms = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/auth/admin/showrooms",
+          `${API_URL}/api/auth/admin/showrooms`,
           {
             method: "GET",
             headers: {
@@ -183,7 +184,7 @@ const Superadmingetshowrooms = () => {
 
             <div className="flex flex-col items-center gap-4">
               <img
-                src={`http://localhost:3000${viewdetails.showroompic}`}
+                src={`${API_URL}${viewdetails.showroompic}`}
                 alt="Avatar"
                 className="w-32 h-32 rounded-full object-cover border-4 border-yellow-500 shadow-md"
               />

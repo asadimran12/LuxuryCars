@@ -3,6 +3,7 @@ import Slidebar from "../components/UI/Slidebar";
 import { useAuth } from "../components/Context/Authcontent";
 import Adminbookingdetails from "./Adminbookingdetails";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../utils/apiConfig";
 
 const Adminbookings = () => {
   const { token, logout } = useAuth();
@@ -16,7 +17,7 @@ const Adminbookings = () => {
     setLoading(true);
     setError("");
     try {
-      const response = await fetch("http://localhost:3000/api/car/carbookings", {
+      const response = await fetch(`${API_URL}/api/car/carbookings`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -32,7 +33,7 @@ const Adminbookings = () => {
         bookingdata.map(async (booking) => {
           try {
             const carResponse = await fetch(
-              `http://localhost:3000/api/car/${booking.car}`,
+              `${API_URL}/api/car/${booking.car}`,
               {
                 method: "GET",
                 headers: {

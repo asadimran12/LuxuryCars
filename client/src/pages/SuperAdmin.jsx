@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../components/Context/Authcontent";
 import { useEffect } from "react";
 import { useState } from "react";
+import { API_URL } from "../utils/apiConfig";
 
 const SuperAdmin = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const SuperAdmin = () => {
     const fetchprofile = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/auth/admin/profile",
+          `${API_URL}/api/auth/admin/profile`,
           {
             method: "GET",
             headers: {

@@ -12,9 +12,10 @@ import L from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import { API_URL } from "../utils/apiConfig";
 
 // Connect to backend Socket.IO server
-const socket = io("http://localhost:3000", {
+const socket = io(API_URL, {
   withCredentials: true,
 });
 

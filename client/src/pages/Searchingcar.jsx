@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../components/Context/Authcontent";
+import { API_URL } from "../utils/apiConfig";
 
 const useQuery = () => new URLSearchParams(useLocation().search);
 
@@ -17,12 +18,12 @@ const Searchingcar = () => {
     if (carName && price) {
       try {
         const res = await fetch(
-          `http://localhost:3000/api/car/searchcar?searchcar=${carName}&price=${price}`,
+          `${API_URL} /api/car / searchcar ? searchcar = ${carName}& price=${price} `,
           {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${token} `,
             },
           }
         );
@@ -41,7 +42,7 @@ const Searchingcar = () => {
   }, [carName, price]);
 
   const handleSearch = () => {
-    navigate(`?searchcar=${encodeURIComponent(carName)}&price=${encodeURIComponent(price)}`);
+    navigate(`? searchcar = ${encodeURIComponent(carName)}& price=${encodeURIComponent(price)} `);
   };
 
   return (
@@ -74,7 +75,7 @@ const Searchingcar = () => {
             onClick={handleSearch}
             className="bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-all"
           >
-             Search
+            Search
           </button>
         </div>
 
@@ -82,7 +83,7 @@ const Searchingcar = () => {
         {results.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {results.map((car) => (
-              <Link to={`/home/carsdetails/${car._id}`} key={car._id}>
+              <Link to={`/ home / carsdetails / ${car._id} `} key={car._id}>
                 <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md hover:scale-[1.01] transition-all duration-300">
                   <h3 className="text-base font-semibold text-gray-800">{car.name}</h3>
                   <p className="text-gray-600 text-sm">
@@ -97,7 +98,7 @@ const Searchingcar = () => {
           </div>
         ) : (
           <p className="text-gray-500 text-center mt-4 text-sm">
-           No cars found. Try another name or price.
+            No cars found. Try another name or price.
           </p>
         )}
       </div>

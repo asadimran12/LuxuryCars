@@ -10,6 +10,7 @@ import {
   Tag,
   CheckCircle,
 } from "lucide-react";
+import { API_URL } from "../utils/apiConfig";
 
 const Booking = () => {
   const { token } = useAuth();
@@ -28,7 +29,7 @@ const Booking = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/car/${id}`, {
+        const response = await fetch(`${API_URL}/api/car/${id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -44,7 +45,7 @@ const Booking = () => {
 
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/user/profile", {
+        const res = await fetch(`${API_URL}/api/user/profile`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -85,7 +86,7 @@ const Booking = () => {
   const handleBooking = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/car/booking/${id}`,
+        `${API_URL}/api/car/booking/${id}`,
         {
           method: "POST",
           headers: {
@@ -114,7 +115,7 @@ const Booking = () => {
       {/* Booking Card */}
       <div className="relative bg-white p-8 md:p-12 rounded-3xl shadow-2xl w-full max-w-2xl border border-gray-200">
         <h2 className="text-3xl font-extrabold mb-8 text-center text-gray-900">
-        Secure Your Ride
+          Secure Your Ride
         </h2>
 
         {/* ✅ Success Message */}

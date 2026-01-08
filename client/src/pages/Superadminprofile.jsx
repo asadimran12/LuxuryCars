@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Superadminslider from "../components/UI/Superadminslider";
 import { useAuth } from "../components/Context/Authcontent";
+import { API_URL } from "../utils/apiConfig";
 
 const Superadminprofile = () => {
-  const {  token } = useAuth();
+  const { token } = useAuth();
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/auth/admin/profile",
+          `${API_URL}/api/auth/admin/profile`,
           {
             method: "GET",
             headers: {
@@ -19,7 +20,7 @@ const Superadminprofile = () => {
           }
         );
         const data = await response.json();
-        setProfile(data.admin); 
+        setProfile(data.admin);
       } catch (error) {
         console.log(error);
       }
@@ -49,7 +50,7 @@ const Superadminprofile = () => {
           {/* Avatar */}
           <div className="flex justify-center mb-4">
             <img
-              src={`http://localhost:3000${profile.avatar}`} // ✅ Adjust base URL if needed
+              src={`${API_URL}${profile.avatar}`} // ✅ Adjust base URL if needed
               alt="Avatar"
               className="w-32 h-32 rounded-full object-cover border-4 border-yellow-500 shadow-md"
             />

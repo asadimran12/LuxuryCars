@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { API_URL } from "../utils/apiConfig";
 
 const Driversignup = () => {
   const [formData, setFormData] = useState({
@@ -30,7 +31,7 @@ const Driversignup = () => {
     });
 
     try {
-      const res = await fetch("http://localhost:3000/api/driver/register", {
+      const res = await fetch(`${API_URL}/api/driver/register`, {
         method: "POST",
         body: data,
       });

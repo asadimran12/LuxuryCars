@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../components/Context/Authcontent";
+import { API_URL } from "../utils/apiConfig";
 
 const Adminbookingdetails = ({ id, onClose }) => {
   const { token } = useAuth();
@@ -10,7 +11,7 @@ const Adminbookingdetails = ({ id, onClose }) => {
   const fetchBooking = async () => {
     try {
       const res = await fetch(
-        `http://localhost:3000/api/car/carbookings/${id}`,
+        `${API_URL}/api/car/carbookings/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -22,10 +23,10 @@ const Adminbookingdetails = ({ id, onClose }) => {
       setBooking(bookingData);
 
       const [carRes, userRes] = await Promise.all([
-        fetch(`http://localhost:3000/api/car/${bookingData.car}`, {
+        fetch(`${API_URL}/api/car/${bookingData.car}`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        fetch(`http://localhost:3000/api/auth/users/${bookingData.user}`, {
+        fetch(`${API_URL}/api/auth/users/${bookingData.user}`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -43,7 +44,7 @@ const Adminbookingdetails = ({ id, onClose }) => {
   const handleupdate = async () => {
     try {
       const bookingresponce = await fetch(
-        `http://localhost:3000/api/car/carbookings/${id}`,
+        `${API_URL}/api/car/carbookings/${id}`,
         {
           method: "PUT",
           headers: {
@@ -69,7 +70,7 @@ const Adminbookingdetails = ({ id, onClose }) => {
   const handledelete = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/car/carbookings/${id}`,
+        `${API_URL}/api/car/carbookings/${id}`,
         {
           method: "DELETE",
           headers: {

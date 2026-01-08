@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../components/Context/Authcontent";
+import { API_URL } from "../utils/apiConfig";
 
 const Car = () => {
   const { token } = useAuth();
@@ -11,7 +12,7 @@ const Car = () => {
   // ✅ Fetch all cars
   const fetchCars = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/car/");
+      const response = await fetch(`${API_URL}/api/car/`);
       const data = await response.json();
       setCars(data);
     } catch (error) {
@@ -25,7 +26,7 @@ const Car = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/auth/getshowroom/${id}`,
+        `${API_URL}/api/auth/getshowroom/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -71,7 +72,7 @@ const Car = () => {
             {/* Image */}
             <div className="bg-gray-100 flex justify-center items-center h-48">
               <img
-                src={`http://localhost:3000${car.image}`}
+                src={`${API_URL}${car.image}`}
                 alt={car.model}
                 className="h-full object-contain"
               />
@@ -145,7 +146,7 @@ const Car = () => {
 
             <div className="flex flex-col items-center gap-4 text-center">
               <img
-                src={`http://localhost:3000${specificShowroom.showroompic}`}
+                src={`${API_URL}${specificShowroom.showroompic}`}
                 alt="Avatar"
                 className="w-32 h-32 rounded-full object-cover border-4 border-yellow-500 shadow-md"
               />

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Chat from "./Chat";
 import { useAuth } from "../components/Context/Authcontent";
+import { API_URL } from "../utils/apiConfig";
 
 const AllChats = () => {
   const { token, role } = useAuth();
@@ -14,8 +15,8 @@ const AllChats = () => {
       try {
         const endpoint =
           role === "driver"
-            ? "http://localhost:3000/api/messages/chat/driver"
-            : "http://localhost:3000/api/messages/chat/user";
+            ? `${API_URL}/api/messages/chat/driver`
+            : `${API_URL}/api/messages/chat/user`;
 
         const res = await fetch(endpoint, {
           credentials: "include",
@@ -33,8 +34,8 @@ const AllChats = () => {
 
             const detailsEndpoint =
               partnerType === "Driver"
-                ? `http://localhost:3000/api/auth/driverprofile/${partnerId}`
-                : `http://localhost:3000/api/auth/driver/users/${partnerId}`;
+                ? `${API_URL}/api/auth/driverprofile/${partnerId}`
+                : `${API_URL}/api/auth/driver/users/${partnerId}`;
 
             const detailsRes = await fetch(detailsEndpoint, {
               headers: { Authorization: `Bearer ${token}` },
@@ -54,11 +55,10 @@ const AllChats = () => {
                   partnerType === "Driver"
                     ? details?.driver?.fullName || "Unknown"
                     : details?.finduser?.username || "Unknown",
-                image: `http://localhost:3000${
-                  partnerType === "Driver"
+                image: `${API_URL}${partnerType === "Driver"
                     ? details?.driver?.profilePhoto || "/default-avatar.png"
                     : details?.finduser?.avatar || "/default-avatar.png"
-                }`,
+                  }`,
               },
             };
           })
@@ -88,10 +88,9 @@ const AllChats = () => {
               key={chat.partner.id}
               onClick={() => setSelectedChat(chat.partner)}
               className={`flex items-center gap-3 p-4 border-b border-gray-200 cursor-pointer 
-                ${
-                  selectedChat?.id === chat.partner.id
-                    ? "bg-blue-100"
-                    : "hover:bg-gray-100"
+                ${selectedChat?.id === chat.partner.id
+                  ? "bg-blue-100"
+                  : "hover:bg-gray-100"
                 }`}
             >
               {/* Partner image */}

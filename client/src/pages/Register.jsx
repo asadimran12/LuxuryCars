@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { API_URL } from "../utils/apiConfig";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -15,8 +16,6 @@ const Register = () => {
   });
 
   const [avatarFile, setAvatarFile] = useState(null);
-
-    const API_URL = import.meta.env?.VITE_API_URL || "http://localhost:3000";
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;

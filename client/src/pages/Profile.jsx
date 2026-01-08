@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../components/Context/Authcontent";
+import { API_URL } from "../utils/apiConfig";
 
 const Profile = () => {
   const { token } = useAuth();
@@ -11,7 +12,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/user/profile", {
+        const response = await fetch(`${API_URL}/api/user/profile`, {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -39,11 +40,11 @@ const Profile = () => {
       }
 
       const response = await fetch(
-        "http://localhost:3000/api/user/profile/update",
+        `${API_URL}/api/user/profile/update`,
         {
           method: "PUT",
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
           body: form,
         }
@@ -71,7 +72,7 @@ const Profile = () => {
           />
         ) : user?.avatar ? (
           <img
-            src={`http://localhost:3000${user?.avatar}`}
+            src={`${API_URL}${user?.avatar}`}
             alt="User Avatar"
             className="w-36 h-36 rounded-full object-cover border-4 border-yellow-500 shadow-md"
           />

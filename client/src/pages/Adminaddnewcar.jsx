@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../components/Context/Authcontent";
 import { useNavigate } from "react-router-dom";
 import Slidebar from "../components/UI/Slidebar";
+import { API_URL } from "../utils/apiConfig";
 
 const Adminaddnewcar = ({ onClose }) => {
   const { token } = useAuth();
@@ -56,7 +57,7 @@ const Adminaddnewcar = ({ onClose }) => {
         data.append("image", formData.image);
       }
 
-      const response = await fetch("http://localhost:3000/api/car/addcar", {
+      const response = await fetch(`${API_URL}/api/car/addcar`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

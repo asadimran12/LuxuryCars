@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../utils/apiConfig";
 
 const Newpassword = () => {
   const [password, setPassword] = useState("");
@@ -21,7 +22,7 @@ const Newpassword = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/api/auth/resetpassword",
+        `${API_URL}/api/auth/resetpassword`,
         {
           method: "PUT",
           headers: {

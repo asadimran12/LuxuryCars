@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../components/Context/Authcontent";
 import Superadminslider from "../components/UI/Superadminslider";
+import { API_URL } from "../utils/apiConfig";
 
 import { Bar } from "react-chartjs-2";
 import {
@@ -32,7 +33,7 @@ const Superadmingetdrivers = () => {
     const fetchDrivers = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/auth/admin/drivers",
+          `${API_URL}/api/auth/admin/drivers`,
           {
             method: "GET",
             headers: {
@@ -182,7 +183,7 @@ const Superadmingetdrivers = () => {
             <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-3xl mx-auto">
               <div className="flex flex-col items-center gap-4">
                 <img
-                  src={`http://localhost:3000${viewdetails.profilePhoto}`}
+                  src={`${API_URL}${viewdetails.profilePhoto}`}
                   alt="Driver Avatar"
                   className="w-32 h-32 rounded-full object-cover border-4 border-yellow-500 shadow-md"
                 />
@@ -200,13 +201,13 @@ const Superadmingetdrivers = () => {
                   <span className="font-semibold">Date of Birth:</span>{" "}
                   {viewdetails.dateOfBirth
                     ? new Date(viewdetails.dateOfBirth).toLocaleDateString(
-                        "en-US",
-                        {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        }
-                      )
+                      "en-US",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )
                     : "N/A"}
                 </p>
                 <p>
@@ -224,13 +225,12 @@ const Superadmingetdrivers = () => {
                 <p>
                   <span className="font-semibold">Background Check:</span>{" "}
                   <span
-                    className={`px-2 py-1 rounded text-white ${
-                      viewdetails.backgroundCheckStatus === "pending"
+                    className={`px-2 py-1 rounded text-white ${viewdetails.backgroundCheckStatus === "pending"
                         ? "bg-yellow-500"
                         : viewdetails.backgroundCheckStatus === "approved"
-                        ? "bg-green-600"
-                        : "bg-red-600"
-                    }`}
+                          ? "bg-green-600"
+                          : "bg-red-600"
+                      }`}
                   >
                     {viewdetails.backgroundCheckStatus}
                   </span>
@@ -238,11 +238,10 @@ const Superadmingetdrivers = () => {
                 <p>
                   <span className="font-semibold">Availability:</span>{" "}
                   <span
-                    className={`px-2 py-1 rounded text-white ${
-                      viewdetails.availabilityStatus === "online"
+                    className={`px-2 py-1 rounded text-white ${viewdetails.availabilityStatus === "online"
                         ? "bg-green-600"
                         : "bg-gray-500"
-                    }`}
+                      }`}
                   >
                     {viewdetails.availabilityStatus}
                   </span>

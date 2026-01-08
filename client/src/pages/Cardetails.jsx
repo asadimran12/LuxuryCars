@@ -10,6 +10,7 @@ import {
   CheckCircle,
   XCircle,
 } from "lucide-react";
+import { API_URL } from "../utils/apiConfig";
 
 const Cardetails = () => {
   const [carData, setCarData] = useState(null);
@@ -18,7 +19,7 @@ const Cardetails = () => {
 
   const fetchCar = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/car/${id}`, {
+      const response = await fetch(`${API_URL}/api/car/${id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -53,12 +54,12 @@ const Cardetails = () => {
           {/* Car Image */}
           <div className="w-full md:w-1/2 flex-shrink-0">
             <img
-              src={`http://localhost:3000${carData.image}`}
+              src={`${API_URL}${carData.image}`}
               alt={carData.name}
               className="w-full h-auto object-cover rounded-xl shadow-lg border border-gray-200"
             />
           </div>
-          
+
           {/* Car Details */}
           <div className="flex-1 w-full">
             <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">
@@ -91,11 +92,10 @@ const Cardetails = () => {
                 label="Availability"
                 value={
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      carData.availability
+                    className={`px-3 py-1 rounded-full text-xs font-semibold ${carData.availability
                         ? "bg-green-100 text-green-700"
                         : "bg-red-100 text-red-700"
-                    }`}
+                      }`}
                   >
                     {carData.availability ? "Available" : "Booked"}
                   </span>

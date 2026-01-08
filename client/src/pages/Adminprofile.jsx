@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../components/Context/Authcontent";
 import Slidebar from "../components/UI/Slidebar";
+import { API_URL } from "../utils/apiConfig";
 
 const AdminProfile = () => {
   const { token } = useAuth();
@@ -11,7 +12,7 @@ const AdminProfile = () => {
   // ✅ Fetch Profile
   const fetchProfile = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/showroom/profile", {
+      const res = await fetch(`${API_URL}/api/showroom/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -26,7 +27,7 @@ const AdminProfile = () => {
   const handleUpdate = async () => {
     try {
       const res = await fetch(
-        "http://localhost:3000/api/showroomowner/profile",
+        `${API_URL}/api/showroomowner/profile`,
         {
           method: "PUT",
           headers: {
@@ -69,7 +70,7 @@ const AdminProfile = () => {
           {/* Profile Picture */}
           <div className="flex flex-col items-center text-center">
             <img
-              src={`http://localhost:3000${profile.showroompic}`}
+              src={`${API_URL}${profile.showroompic}`}
               alt="Profile"
               className="w-24 h-24 sm:w-28 sm:h-28 rounded-full shadow-md object-cover border-4 border-yellow-400"
             />

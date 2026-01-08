@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../components/Context/Authcontent";
 import Superadminslider from "../components/UI/Superadminslider";
+import { API_URL } from "../utils/apiConfig";
 
 import { Bar } from "react-chartjs-2";
 import {
@@ -31,7 +32,7 @@ const Superadmingetusers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/auth/users", {
+        const response = await fetch(`${API_URL}/api/auth/users`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -180,7 +181,7 @@ const Superadmingetusers = () => {
 
             <div className="flex flex-col items-center gap-4">
               <img
-                src={`http://localhost:3000${viewdetails.avatar}`}
+                src={`${API_URL}${viewdetails.avatar}`}
                 alt="Avatar"
                 className="w-32 h-32 rounded-full object-cover border-4 border-yellow-500 shadow-md"
               />
@@ -207,10 +208,10 @@ const Superadmingetusers = () => {
                 </span>{" "}
                 {viewdetails.dob
                   ? new Date(viewdetails.dob).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })
                   : "N/A"}
               </p>
             </div>

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { FaCogs, FaUsers, FaCalendarAlt } from "react-icons/fa";
+import { API_URL } from "../utils/apiConfig";
 
 import Searchingcar from "./Searchingcar";
 
 const Home = () => {
   const [car, setcar] = useState([]);
   const [visibleCount, setVisibleCount] = useState(3);
-  const API_URL = import.meta.env?.VITE_API_URL || "http://localhost:3000";
 
   useEffect(() => {
     const fetchcar = async () => {
@@ -235,7 +235,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      
+
     </>
   );
 };

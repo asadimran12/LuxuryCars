@@ -3,6 +3,7 @@ import Slidebar from "../components/UI/Slidebar";
 import { useAuth } from "../components/Context/Authcontent";
 import AdminUserDetails from "./Adminuserdetails";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../utils/apiConfig";
 
 const Adminusers = () => {
   const { token, logout } = useAuth();
@@ -12,7 +13,7 @@ const Adminusers = () => {
 
   const fetchusers = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/auth/users", {
+      const response = await fetch(`${API_URL}/api/auth/users`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -88,8 +89,8 @@ const Adminusers = () => {
                       <td className="px-6 py-4 border-b">
                         <button
                           onClick={() => setSelectedUserId(user._id)}
-                            className="bg-yellow-600 text-white px-4 py-1.5 rounded-md hover:bg-yellow-700 transition text-sm"
-                       
+                          className="bg-yellow-600 text-white px-4 py-1.5 rounded-md hover:bg-yellow-700 transition text-sm"
+
                         >
                           View Details
                         </button>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../components/Context/Authcontent";
 import { MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../utils/apiConfig";
 
 // Booking Form Component
 const BookingForm = ({ driver, onClose, onConfirm }) => {
@@ -145,7 +146,7 @@ const BookDriver = () => {
     try {
       setSelectedDriver(id);
       const response = await fetch(
-        `http://localhost:3000/api/auth/driverprofile/${id}`,
+        `${API_URL}/api/auth/driverprofile/${id}`,
         {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },
@@ -162,7 +163,7 @@ const BookDriver = () => {
   const handleLocation = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/auth/driverlocation`,
+        `${API_URL}/api/auth/driverlocation`,
         {
           method: "POST",
           headers: {
@@ -184,7 +185,7 @@ const BookDriver = () => {
   const handleBooking = async (driverId, bookingData) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/auth/driverbook/${driverId}`,
+        `${API_URL}/api/auth/driverbook/${driverId}`,
         {
           method: "POST",
           headers: {
@@ -240,7 +241,7 @@ const BookDriver = () => {
                   className="flex items-center gap-4 border p-3 rounded-2xl w-full shadow-md"
                 >
                   <img
-                    src={`http://localhost:3000${driver?.profilePhoto}`}
+                    src={`${API_URL}${driver?.profilePhoto}`}
                     alt={driver.fullName}
                     className="w-12 h-12 rounded-full object-cover"
                   />

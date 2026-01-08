@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../components/Context/Authcontent";
 import { MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../utils/apiConfig";
 
 const BookDriver = () => {
   const { token } = useAuth();
@@ -15,7 +16,7 @@ const BookDriver = () => {
     try {
       setSelectedDriver(id);
       const response = await fetch(
-        `http://localhost:3000/api/auth/driverprofile/${id}`,
+        `${API_URL}/api/auth/driverprofile/${id}`,
         {
           method: "GET",
           headers: {
@@ -36,7 +37,7 @@ const BookDriver = () => {
   const handleLocation = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/auth/driverlocation`,
+        `${API_URL}/api/auth/driverlocation`,
         {
           method: "POST",
           headers: {
@@ -86,7 +87,7 @@ const BookDriver = () => {
                   className="flex items-center gap-4 border p-3 rounded-2xl w-full shadow-md"
                 >
                   <img
-                    src={`http://localhost:3000${driver?.profilePhoto}`}
+                    src={`${API_URL}${driver?.profilePhoto}`}
                     alt={driver.fullName}
                     className="w-12 h-12 rounded-full object-cover"
                   />
@@ -157,7 +158,7 @@ const BookDriver = () => {
               {/* Driver Profile */}
               <div className="flex items-center gap-4 mb-4">
                 <img
-                  src={`http://localhost:3000${driverprofile?.profilePhoto}`}
+                  src={`${API_URL}${driverprofile?.profilePhoto}`}
                   alt="Driver"
                   className="w-16 h-16 rounded-full object-cover border"
                 />
@@ -166,11 +167,10 @@ const BookDriver = () => {
                     {driverprofile.fullName}
                   </h2>
                   <p
-                    className={`text-sm ${
-                      driverprofile.availabilityStatus === "online"
+                    className={`text-sm ${driverprofile.availabilityStatus === "online"
                         ? "text-green-600"
                         : "text-red-600"
-                    }`}
+                      }`}
                   >
                     {driverprofile.availabilityStatus}
                   </p>

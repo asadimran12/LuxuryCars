@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../components/Context/Authcontent";
 import { FaTimes } from "react-icons/fa";
+import { API_URL } from "../utils/apiConfig";
 
 const AdminUserDetails = ({ id, onClose }) => {
   const { token } = useAuth();
@@ -8,7 +9,7 @@ const AdminUserDetails = ({ id, onClose }) => {
 
   const fetchUser = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/api/auth/users/${id}`, {
+      const res = await fetch(`${API_URL}/api/auth/users/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -29,7 +30,7 @@ const AdminUserDetails = ({ id, onClose }) => {
   const handledelete = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/auth/users/${id}`,
+        `${API_URL}/api/auth/users/${id}`,
         {
           method: "DELETE",
           headers: {

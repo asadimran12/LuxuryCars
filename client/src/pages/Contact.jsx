@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import { useAuth } from "../components/Context/Authcontent";
+import { API_URL } from "../utils/apiConfig";
 
 const Contact = () => {
   const { token } = useAuth();
@@ -14,7 +15,7 @@ const Contact = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/user/profile", {
+        const response = await fetch(`${API_URL}/api/user/profile`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -45,7 +46,7 @@ const Contact = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3000/api/user/querry/add", {
+      const response = await fetch(`${API_URL}/api/user/querry/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

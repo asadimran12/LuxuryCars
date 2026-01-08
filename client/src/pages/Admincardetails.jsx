@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../components/Context/Authcontent";
+import { API_URL } from "../utils/apiConfig";
 
 const AdminCarDetails = ({ id, onClose }) => {
   const { token } = useAuth();
@@ -7,7 +8,7 @@ const AdminCarDetails = ({ id, onClose }) => {
 
   const fetchCarDetails = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/api/car/${id}`, {
+      const res = await fetch(`${API_URL}/api/car/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -38,7 +39,7 @@ const AdminCarDetails = ({ id, onClose }) => {
         {car.image && (
           <div className="w-full h-40 sm:h-64 overflow-hidden">
             <img
-              src={`http://localhost:3000${car.image}`}
+              src={`${API_URL}${car.image}`}
               alt={car.name}
               className="w-full h-full object-cover hover:scale-105 transition-transform"
             />
@@ -65,9 +66,8 @@ const AdminCarDetails = ({ id, onClose }) => {
             <div className="bg-gray-50 p-3 rounded-md shadow-sm">
               <strong>Availability:</strong>
               <p
-                className={`font-semibold ${
-                  car.availability ? "text-green-600" : "text-red-600"
-                }`}
+                className={`font-semibold ${car.availability ? "text-green-600" : "text-red-600"
+                  }`}
               >
                 {car.availability ? "Available" : "Booked"}
               </p>

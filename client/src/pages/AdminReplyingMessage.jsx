@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useAuth } from "../components/Context/Authcontent";
+import { API_URL } from "../utils/apiConfig";
 
-const AdminReplyingMessage = ({ id, onClose, name,subject, email }) => {
+const AdminReplyingMessage = ({ id, onClose, name, subject, email }) => {
   const { token } = useAuth();
   const [reply, setReply] = useState("");
   const [loading, setLoading] = useState(false);
@@ -12,7 +13,7 @@ const AdminReplyingMessage = ({ id, onClose, name,subject, email }) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:3000/api/user/querry/admin/reply/${id}`,
+        `${API_URL}/api/user/querry/admin/reply/${id}`,
         {
           method: "POST",
           headers: {
@@ -21,7 +22,7 @@ const AdminReplyingMessage = ({ id, onClose, name,subject, email }) => {
           },
           body: JSON.stringify({
             to: email,
-            subject:`Re: ${subject || "Your Inquiry"}`, 
+            subject: `Re: ${subject || "Your Inquiry"}`,
             message: reply,
           }),
         }
@@ -34,8 +35,8 @@ const AdminReplyingMessage = ({ id, onClose, name,subject, email }) => {
       }
 
       console.log("Reply sent successfully");
-      setReply(""); 
-      onClose(); 
+      setReply("");
+      onClose();
     } catch (error) {
       console.error("Error sending reply:", error);
     } finally {

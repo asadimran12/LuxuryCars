@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Slidebar from "../components/UI/Slidebar";
 import { useAuth } from "../components/Context/Authcontent";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../utils/apiConfig";
 
 const AdminReview = () => {
   const { token, logout } = useAuth();
@@ -13,7 +14,7 @@ const AdminReview = () => {
   const fetchReviews = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/reviews/getallreviews",
+        `${API_URL}/api/reviews/getallreviews`,
         {
           method: "GET",
           headers: {

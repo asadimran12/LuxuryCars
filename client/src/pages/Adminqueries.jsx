@@ -3,6 +3,7 @@ import Slidebar from "../components/UI/Slidebar";
 import { useAuth } from "../components/Context/Authcontent";
 import { useNavigate } from "react-router-dom";
 import AdminReplyingMessage from "./AdminReplyingMessage";
+import { API_URL } from "../utils/apiConfig";
 
 const Adminqueries = () => {
   const { token, logout } = useAuth();
@@ -13,7 +14,7 @@ const Adminqueries = () => {
   const fetchQueries = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/user/querry/admin/get",
+        `${API_URL}/api/user/querry/admin/get`,
         {
           method: "GET",
           headers: {
