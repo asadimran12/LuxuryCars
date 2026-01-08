@@ -22,22 +22,35 @@ const upload = require("./middleware/multer");
 const app = express();
 const server = http.createServer(app);
 
-// Allow frontend origin from env or default to '*'
-const frontendURL = process.env.FRONTEND_URL || "*";
+// ✅ Allow multiple frontend origins
+const allowedOrigins = [
+  "https://luxury-cars-murex.vercel.app",  // Vercel deployment
+  "http://localhost:5173",                  // Local Vite dev server
+  "http://localhost:3000",                  // Alternative local port
+];
+
 app.use(cors({
-  origin: frontendURL,
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or Postman)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 }));
 
-// Handle preflight requests globally
 app.options("*", cors());
 
-// ✅ Socket.IO
+// ✅ Socket.IO with same allowed origins
 const io = new Server(server, {
   cors: {
-    origin: frontendURL,
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true,
   },
