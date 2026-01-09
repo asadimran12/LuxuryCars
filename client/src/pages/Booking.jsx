@@ -142,7 +142,7 @@ const Booking = () => {
                   <Tag className="text-yellow-500 w-5 h-5" />
                   <p className="font-medium">
                     <span className="text-gray-900 font-semibold">Price/Day:</span>
-                    <span className="text-yellow-600 font-bold ml-1">${bookingDetail.pricePerDay}</span>
+                    <span className="text-yellow-600 font-bold ml-1">Rs.{bookingDetail.pricePerDay}</span>
                   </p>
                 </div>
               </div>

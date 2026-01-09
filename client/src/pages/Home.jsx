@@ -132,12 +132,11 @@ const Home = () => {
 
                 <div className="flex justify-between text-xs text-gray-600 w-full mt-1">
                   <span>{cars.year}</span>
-                  <span>15k</span>
                   <span>{cars.fuelType}</span>
                 </div>
 
                 <div className="text-blue-700 font-bold text-md">
-                  {cars.pricePerDay}.000$
+                  Rs.{cars.pricePerDay}.000/Day
                 </div>
 
                 <NavLink
