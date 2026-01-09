@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaTwitter, FaFacebookF, FaInstagram } from 'react-icons/fa';
+import logo from "../../../public/EliteCar_logo.png"
 
 const Footer = () => {
   return (
@@ -38,7 +39,7 @@ const Footer = () => {
 
         {/* Footer bottom */}
         <div className="col-span-full border-t border-gray-600 mt-6 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <span className="text-gray-400">LUXURYCARS</span>
+          <span className="text-gray-400 flex items-center"> <img src={logo} className="w-7 h-7" alt="EliteDrive" /> <span className="text-[#F4D047]">Elite</span>Drive</span>
           <div className="flex gap-4 text-white text-lg">
             <FaTwitter className="hover:text-yellow-500 cursor-pointer" />
             <FaFacebookF className="hover:text-yellow-500 cursor-pointer" />

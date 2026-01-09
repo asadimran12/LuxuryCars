@@ -33,7 +33,7 @@ const Header = () => {
           className=" font-bold text-gray-800 cursor-pointer"
           onClick={() => navigate("/")}
         >
-          <span className=" text-1xl mr-3 sm:text-2xl"><img src={logo} alt="EliteDrive" /> <span className="text-yellow-600">Elite</span>Drive</span>
+          <span className=" text-1xl mr-3 sm:text-2xl flex justify-center align-center"><img src={logo} className="w-12 h-12" alt="EliteDrive" /> <span className="text-[#F4D047]">Elite</span>Drive</span>
         </h1>
 
         {/* Navigation Links */}
