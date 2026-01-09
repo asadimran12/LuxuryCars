@@ -9,7 +9,7 @@ import {
 } from "react-icons/fi";
 import { FaUser, FaCar } from "react-icons/fa"; // 🚗 add car icon
 import { useAuth } from "../Context/Authcontent";
-import logo from "../../../public/EliteCar_logo.png"
+import logo from "/EliteCar_logo.png"
 
 
 const Header = () => {

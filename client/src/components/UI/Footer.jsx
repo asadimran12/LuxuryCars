@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaTwitter, FaFacebookF, FaInstagram } from 'react-icons/fa';
-import logo from "../../../public/EliteCar_logo.png"
+import logo from "/EliteCar_logo.png"
 
 const Footer = () => {
   return (

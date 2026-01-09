@@ -43,7 +43,7 @@ const Services = () => {
           ))}
         </div>
       </div>
-      <FAQ/>
+      <FAQ />
     </section>
   );
 };
