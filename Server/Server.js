@@ -60,10 +60,33 @@ const io = new Server(server, {
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 
-// DB Connection
-mongoose.connect(process.env.MONGO)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
+// DB Connection with production-ready settings
+mongoose.connect(process.env.MONGO, {
+  serverSelectionTimeoutMS: 30000,  // Increase to 30 seconds
+  socketTimeoutMS: 45000,            // Socket timeout
+  family: 4,                         // Use IPv4, skip trying IPv6
+  maxPoolSize: 10,                   // Connection pool size
+  minPoolSize: 2,                    // Minimum connections
+  retryWrites: true,                 // Retry write operations
+})
+  .then(() => console.log("✅ MongoDB connected successfully"))
+  .catch((err) => {
+    console.error("❌ MongoDB connection error:", err);
+    process.exit(1);  // Exit if can't connect to prevent buffering timeouts
+  });
+
+// MongoDB connection event handlers for debugging
+mongoose.connection.on('connected', () => {
+  console.log('✅ Mongoose connected to MongoDB');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('❌ Mongoose connection error:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.warn('⚠️  Mongoose disconnected from MongoDB');
+});
 
 // Routes
 app.use("/api/auth", authRouter);
