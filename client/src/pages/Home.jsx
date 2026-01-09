@@ -95,7 +95,7 @@ const Home = () => {
               </div>
               <div>
                 <h2 className="text-lg sm:text-xl">Get in touch with our</h2>
-                <h2 className="text-xl sm:text-2xl font-bold">LuxuryCars</h2>
+                <h2 className="text-xl sm:text-2xl font-bold">EliteDrive</h2>
               </div>
               <button className="bg-yellow-600 text-lg sm:text-xl text-white px-4 py-2 rounded-2xl">
                 Rent Now
