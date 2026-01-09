@@ -9,6 +9,8 @@ import {
 } from "react-icons/fi";
 import { FaUser, FaCar } from "react-icons/fa"; // 🚗 add car icon
 import { useAuth } from "../Context/Authcontent";
+import logo from "../../../public/EliteCar_logo.png"
+
 
 const Header = () => {
   const { token, logout } = useAuth();
@@ -20,7 +22,7 @@ const Header = () => {
     { path: "/home/services", label: "Services" },
     { path: "/home/blogsposts", label: "Blog" },
     { path: "/home/contactus", label: "Contact Us" },
-      { path: "/home/UsersAllbookings", label: "Bookings" },
+    { path: "/home/UsersAllbookings", label: "Bookings" },
   ];
 
   return (
@@ -31,7 +33,7 @@ const Header = () => {
           className=" font-bold text-gray-800 cursor-pointer"
           onClick={() => navigate("/")}
         >
-          <span className=" text-1xl mr-3 sm:text-2xl"> LuxuryCars</span>
+          <span className=" text-1xl mr-3 sm:text-2xl"><img src={logo} alt="EliteDrive" /> <span className="text-yellow-600">Elite</span>Drive</span>
         </h1>
 
         {/* Navigation Links */}
@@ -40,11 +42,10 @@ const Header = () => {
             <Link
               key={path}
               to={path}
-              className={`relative text-gray-700 font-medium transition duration-200 hover:text-yellow-600 ${
-                location.pathname === path
-                  ? "after:w-full after:bg-yellow-500"
-                  : "after:w-0"
-              } after:absolute after:h-[2px] after:bottom-0 after:left-0 after:transition-all after:duration-300`}
+              className={`relative text-gray-700 font-medium transition duration-200 hover:text-yellow-600 ${location.pathname === path
+                ? "after:w-full after:bg-yellow-500"
+                : "after:w-0"
+                } after:absolute after:h-[2px] after:bottom-0 after:left-0 after:transition-all after:duration-300`}
             >
               {label}
             </Link>
