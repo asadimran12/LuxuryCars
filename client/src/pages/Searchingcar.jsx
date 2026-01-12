@@ -18,7 +18,7 @@ const Searchingcar = () => {
     if (carName && price) {
       try {
         const res = await fetch(
-          `${API_URL} /api/car / searchcar ? searchcar = ${carName}& price=${price} `,
+          `${API_URL}/api/car/searchcar?searchcar=${carName}&price=${price}`,
           {
             method: "GET",
             headers: {
@@ -37,12 +37,9 @@ const Searchingcar = () => {
     }
   };
 
-  useEffect(() => {
-    fetchCars();
-  }, [carName, price]);
-
   const handleSearch = () => {
-    navigate(`? searchcar = ${encodeURIComponent(carName)}& price=${encodeURIComponent(price)} `);
+    fetchCars();
+    navigate(`?searchcar=${encodeURIComponent(carName)}&price=${encodeURIComponent(price)}`);
   };
 
   return (
@@ -83,11 +80,11 @@ const Searchingcar = () => {
         {results.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {results.map((car) => (
-              <Link to={`/ home / carsdetails / ${car._id} `} key={car._id}>
+              <Link to={`/home/carsdetails/${car._id}`} key={car._id}>
                 <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md hover:scale-[1.01] transition-all duration-300">
                   <h3 className="text-base font-semibold text-gray-800">{car.name}</h3>
                   <p className="text-gray-600 text-sm">
-                    Price: <span className="font-medium">${car.pricePerDay}</span> / day
+                    Price: <span className="font-medium">Rs.{car.pricePerDay}</span> / day
                   </p>
                   <p className="text-blue-500 text-xs mt-1 hover:underline">
                     View Details →

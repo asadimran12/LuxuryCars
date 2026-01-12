@@ -3,6 +3,7 @@ const User = require("../model/auth_model");
 const OTP_model = require("../model/OTP_model");
 const Driver = require("../model/Driver_model");
 const Driverbook_model = require("../model/Driver_booking_model");
+const carbookmodel=require("../model/booking_model")
 const showroom = require("../model/Showroomowner_model");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
@@ -392,17 +393,25 @@ const GetAllbookings = async (req, res) => {
   try {
     const userId = req.user._id;
 
+   const carbookings = await carbookmodel
+  .find({ user: userId })
+  .populate("car")                       // Populate car details
+  .populate("user", "username email");   // Populate user details
+
+
+
     const bookings = await Driverbook_model.find({ bookedby: userId })
       .populate("driver")
-      .populate("bookedby", "name email");
+      .populate("bookedby", "username email");
 
-    if (!bookings || bookings.length === 0) {
+    // Only return 404 if BOTH arrays are empty
+    if ((!bookings || bookings.length === 0) && (!carbookings || carbookings.length === 0)) {
       return res
         .status(404)
         .json({ message: "No bookings found for this user" });
     }
 
-    return res.status(200).json({ bookings });
+    return res.status(200).json({ bookings, carbookings });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

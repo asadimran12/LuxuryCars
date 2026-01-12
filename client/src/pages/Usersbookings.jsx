@@ -4,11 +4,12 @@ import { API_URL } from "../utils/apiConfig";
 
 const Usersbookings = () => {
   const { token } = useAuth();
-  const [bookings, setBookings] = useState([]);
+  const [carBookings, setCarBookings] = useState([]);
+  const [userBookings, setUserBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
 
-  // ✅ Fetch all user bookings + profile
+  // ✅ Fetch user bookings, car bookings, and profile
   useEffect(() => {
     const fetchBookings = async () => {
       try {
@@ -28,12 +29,14 @@ const Usersbookings = () => {
           profileres.json(),
         ]);
 
-        console.log("Bookings:", bookingsData.bookings, "User:", userData.user);
+        console.log("User Bookings:", bookingsData.bookings);
+        console.log("Car Bookings:", bookingsData.carbookings);
 
-        setBookings(bookingsData.bookings || []); // ✅ only array
-        setUser(userData.user || null); // ✅ only user object
+        setUserBookings(bookingsData.bookings || []);
+        setCarBookings(bookingsData.carbookings || []);
+        setUser(userData.user || null);
       } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
       } finally {
         setLoading(false);
       }
@@ -42,29 +45,25 @@ const Usersbookings = () => {
     fetchBookings();
   }, [token]);
 
-  // ✅ Delete booking
+  // ✅ Delete booking (works for user bookings)
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this booking?"))
-      return;
+    if (!window.confirm("Are you sure you want to delete this booking?")) return;
 
     try {
-      const response = await fetch(
-        `${API_URL}/api/auth/userdelbooking/${id}`,
-        {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await fetch(`${API_URL}/api/auth/userdelbooking/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       const data = await response.json();
       if (response.ok) {
-        setBookings((prev) => prev.filter((b) => b._id !== id));
+        setUserBookings((prev) => prev.filter((b) => b._id !== id));
         alert("Booking deleted successfully!");
       } else {
         alert(data.message || "Failed to delete booking");
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     }
   };
 
@@ -74,43 +73,40 @@ const Usersbookings = () => {
 
   return (
     <div className="p-4 sm:p-6">
+      {/* ✅ User Info */}
       {user && (
-        <div>
-          <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center text-yellow-600">
+        <div className="mb-6 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3 text-yellow-600">
             {user.username} Bookings
           </h2>
-          <div className="mb-6 text-center">
-            <p className="text-lg font-medium">👤 {user.email}</p>
-          </div>
+          <p className="text-lg font-medium">👤 {user.username}</p>
+          <p className="text-lg font-medium">{user.email}</p>
         </div>
       )}
 
-      {bookings.length === 0 ? (
-        <p className="text-center text-gray-500">No bookings found.</p>
+      {/* ✅ User Bookings Section */}
+      <h3 className="text-xl font-semibold mb-3 text-gray-800">Driver Bookings</h3>
+      {userBookings.length === 0 ? (
+        <p className="text-gray-500 mb-6">No driver bookings found.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {bookings.map((booking) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {userBookings.map((booking) => (
             <div
               key={booking._id}
-              className="p-4 sm:p-5 border rounded-xl shadow-md sm:shadow-lg bg-white hover:shadow-xl transition duration-200 flex flex-col justify-between"
+              className="p-4 sm:p-5 border rounded-xl shadow-md bg-white hover:shadow-xl flex flex-col justify-between"
             >
               <div>
-                <h3 className="text-base sm:text-lg font-semibold mb-2 text-gray-800">
+                <h4 className="text-base sm:text-lg font-semibold mb-2 text-gray-800">
                   🚖 {booking.pickupLocation} ➝ {booking.dropoffLocation}
-                </h3>
+                </h4>
                 <p className="text-sm sm:text-base">
-                  <strong>Passenger:</strong> {booking.passengerName} (
-                  {booking.passengerPhone})
+                  <strong>Passenger:</strong> {booking.passengerName} ({booking.passengerPhone})
                 </p>
                 <p className="text-sm sm:text-base">
-                  <strong>Distance:</strong> {booking.distance} km |{" "}
-                  <strong>Duration:</strong> {booking.duration} Hours
+                  <strong>Distance:</strong> {booking.distance} km | <strong>Duration:</strong> {booking.duration} Hours
                 </p>
                 <p className="text-sm sm:text-base">
-                  <strong>Fare:</strong>{" "}
-                  <span className="text-green-600 font-semibold">
-                    Rs. {booking.fare}
-                  </span>
+                  <strong>Fare:</strong> <span className="text-green-600 font-semibold">Rs. {booking.fare}</span>
                 </p>
                 <p className="text-sm sm:text-base">
                   <strong>Status:</strong>{" "}
@@ -127,20 +123,7 @@ const Usersbookings = () => {
                     {booking.status}
                   </span>
                 </p>
-                <p className="text-sm sm:text-base">
-                  <strong>Payment:</strong> {booking.paymentStatus}
-                </p>
-                <p className="text-sm sm:text-base">
-                  <strong>Driver:</strong> {booking.driver?.fullName} (
-                  {booking.driver?.email})
-                </p>
-                <p className="text-sm sm:text-base">
-                  <strong>Date:</strong>{" "}
-                  {new Date(booking.bookingDate).toLocaleString()}
-                </p>
               </div>
-
-              {/* ✅ Buttons */}
               <div className="mt-4 flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => handleDelete(booking._id)}
@@ -148,6 +131,52 @@ const Usersbookings = () => {
                 >
                   Delete
                 </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ✅ Car Bookings Section */}
+      <h3 className="text-xl font-semibold mb-3 text-gray-800">Car Bookings</h3>
+      {carBookings.length === 0 ? (
+        <p className="text-gray-500">No car bookings found.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {carBookings.map((booking) => (
+            <div
+              key={booking._id}
+              className="p-4 sm:p-5 border rounded-xl shadow-md bg-white hover:shadow-xl flex flex-col justify-between"
+            >
+              <div>
+                <h4 className="text-base sm:text-lg font-semibold mb-2 text-gray-800">
+                  🚗 {booking.car.name} ({booking.car.brand} - {booking.car.model})
+                </h4>
+                <p className="text-sm sm:text-base">
+                  <strong>Year:</strong> {booking.car.year}
+                </p>
+                <p className="text-sm sm:text-base">
+                  <strong>Status:</strong>{" "}
+                  <span
+                    className={`px-2 py-1 rounded text-white text-xs sm:text-sm ${booking.status === "Pending"
+                        ? "bg-yellow-500"
+                        : booking.status === "Completed"
+                          ? "bg-green-600"
+                          : booking.status === "Cancelled"
+                            ? "bg-red-600"
+                            : "bg-blue-600"
+                      }`}
+                  >
+                    {booking.status}
+                  </span>
+                </p>
+                <p className="text-sm sm:text-base">
+                  <strong>Total Price:</strong> Rs. {booking.totalPrice}
+                </p>
+                <p className="text-sm sm:text-base">
+                  <strong>Booking Dates:</strong>{" "}
+                  {new Date(booking.startDate).toLocaleDateString()} ➝ {new Date(booking.endDate).toLocaleDateString()}
+                </p>
               </div>
             </div>
           ))}
