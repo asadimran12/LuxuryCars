@@ -52,7 +52,7 @@ const Home = () => {
 
   const features = [
     {
-      icon: <FaCalendarAlt className="text-blue-700 text-3xl" />,
+      icon: <FaCalendarAlt className="text-yellow-700 text-3xl" />,
       title: "Book with flexibility",
       description: "Easily find car and book with no change fees.",
     },
@@ -135,13 +135,13 @@ const Home = () => {
                   <span>{cars.fuelType}</span>
                 </div>
 
-                <div className="text-blue-700 font-bold text-md">
+                <div className="text-yellow-700 font-bold text-md">
                   Rs.{cars.pricePerDay}.000/Day
                 </div>
 
                 <NavLink
                   to={`/home/carsdetails/${cars._id}`}
-                  className="bg-blue-800 text-white w-full py-1 rounded-lg text-sm font-semibold text-center"
+                  className="bg-yellow-600 text-white w-full py-1 rounded-lg text-sm font-semibold text-center"
                 >
                   Details
                 </NavLink>
@@ -227,7 +227,7 @@ const Home = () => {
                 placeholder="EMAIL"
                 className="flex-grow px-3 sm:px-4 py-2 rounded-l-md text-sm outline-none"
               />
-              <button className="bg-blue-800 text-white px-4 sm:px-6 py-2 rounded-r-md hover:bg-blue-900 transition">
+              <button className="bg-yellow-800 text-white px-4 sm:px-6 py-2 rounded-r-md hover:bg-blue-900 transition">
                 Next
               </button>
             </div>
