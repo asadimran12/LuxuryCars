@@ -52,7 +52,7 @@ const Home = () => {
 
   const features = [
     {
-      icon: <FaCalendarAlt className="text-yellow-700 text-3xl" />,
+      icon: <FaCalendarAlt className="text-yellow-500 text-3xl" />,
       title: "Book with flexibility",
       description: "Easily find car and book with no change fees.",
     },
@@ -227,7 +227,7 @@ const Home = () => {
                 placeholder="EMAIL"
                 className="flex-grow px-3 sm:px-4 py-2 rounded-l-md text-sm outline-none"
               />
-              <button className="bg-yellow-800 text-white px-4 sm:px-6 py-2 rounded-r-md hover:bg-blue-900 transition">
+              <button className="bg-yellow-800 text-white px-4 sm:px-6 py-2 rounded-r-md hover:bg-yellow-900 transition">
                 Next
               </button>
             </div>
