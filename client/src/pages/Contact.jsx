@@ -80,15 +80,15 @@ const Contact = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         <div className="space-y-6">
           <div className="flex items-center gap-4">
-            <FaPhoneAlt className="text-blue-700 text-xl" />
+            <FaPhoneAlt className="text-yellow-700 text-xl" />
             <p className="text-gray-700">+92 342 1852394</p>
           </div>
           <div className="flex items-center gap-4">
-            <FaEnvelope className="text-blue-700 text-xl" />
+            <FaEnvelope className="text-yellow-700 text-xl" />
             <p className="text-gray-700">iasad4855@gmail.com</p>
           </div>
           <div className="flex items-center gap-4">
-            <FaMapMarkerAlt className="text-blue-700 text-xl" />
+            <FaMapMarkerAlt className="text-yellow-700 text-xl" />
             <p className="text-gray-700">Near Pilot School, Phalia, Pakistan</p>
           </div>
         </div>
@@ -108,7 +108,7 @@ const Contact = () => {
               placeholder="Your Name"
               value={user.username}
               onChange={handleChange}
-              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
               required
             />
           </div>
@@ -123,7 +123,7 @@ const Contact = () => {
               placeholder="you@example.com"
               value={user.email}
               onChange={handleChange}
-              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
               required
             />
           </div>
@@ -138,7 +138,7 @@ const Contact = () => {
               placeholder="XYZ"
               value={user.subject}
               onChange={handleChange}
-              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
               required
             />
           </div>
@@ -153,14 +153,14 @@ const Contact = () => {
               placeholder="Write your message here..."
               value={user.message}
               onChange={handleChange}
-              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
               required
             ></textarea>
           </div>
 
           <button
             type="submit"
-            className="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800 transition"
+            className="bg-yellow-700 text-white px-6 py-2 rounded hover:bg-blue-800 transition"
           >
             Send Message
           </button>
